@@ -11,12 +11,12 @@ export const MainMenuScreen = () => {
             </View>
             <View style={styles.menuContainer}>
                 <View style={[styles.rowMenu, { marginBottom: 80 }]}>
-                    <MenuItem helperText="Dashboard" icon={icons.dashboard} />
-                    <MenuItem helperText="Clientes" icon={icons.clients} />
+                    <MenuItem helperText="Dashboard" icon={icons.dashboard} route="visita_list" />
+                    <MenuItem helperText="Clientes" icon={icons.clients} route="visita_list" />
                 </View>
                 <View style={styles.rowMenu}>
-                    <MenuItem helperText="Visitas" icon={icons.visit} />
-                    <MenuItem helperText="Tareas" icon={icons.task} />
+                    <MenuItem helperText="Visitas" icon={icons.visit} route="visita_list" />
+                    <MenuItem helperText="Tareas" icon={icons.task} route="visita_list" />
                 </View>
             </View>
         </View>
