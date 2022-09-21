@@ -1,14 +1,15 @@
 import { FC } from "react";
-import { ImageBackground, Text, useWindowDimensions, View, StyleSheet } from 'react-native'
+import { ImageBackground, Text, View, StyleSheet } from 'react-native'
 import { colors } from "../constants";
 import { Visita } from "../types/visita_types";
 
 type props = {
-    visita: Visita
+    visita: Visita,
+    height: number,
+    width: number
 }
 
-export const VisitaCard: FC<props> = ({ visita }) => {
-    const { height, width } = useWindowDimensions();
+export const VisitaCard: FC<props> = ({ visita, height, width }) => {
 
     return (
         <ImageBackground source={{ uri: visita.imagen }} imageStyle={{ borderRadius: 6 }} style={{ height: height * 0.4, width: width * 0.9, alignSelf: "center", marginTop: 10 }} resizeMode="cover">

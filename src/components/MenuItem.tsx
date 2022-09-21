@@ -1,8 +1,8 @@
 import React, { FC } from "react"
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { StackNavigationProp } from "@react-navigation/stack"
-import { AppNavigationType } from "../types/navigationTypes"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { AppNavigationType } from "../types/navigation_types"
 
 type Props = {
     icon: any
@@ -11,7 +11,7 @@ type Props = {
 }
 
 export const MenuItem: FC<Props> = ({ icon, helperText, route }) => {
-    const navigate = useNavigation<StackNavigationProp<AppNavigationType>>();
+    const navigate = useNavigation<NativeStackNavigationProp<AppNavigationType>>();
 
     return (
         <TouchableOpacity style={styles.container} onPress={() => navigate.navigate(route)}>

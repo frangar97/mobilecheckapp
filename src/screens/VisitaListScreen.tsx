@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FlatList } from 'react-native'
+import { FlatList, useWindowDimensions } from 'react-native'
 import axios from 'axios';
 import { apiURL } from '../constants';
 import { useUsuario } from '../store/useUsuario'
@@ -8,6 +8,7 @@ import { VisitaCard } from '../components';
 
 export const VisitaListScreen = () => {
     const token = useUsuario(e => e.token);
+    const { height, width } = useWindowDimensions();
     const [visitas, setVisitas] = useState<Visita[]>([]);
 
     const obtenerVisitasUsuario = async () => {
@@ -28,8 +29,7 @@ export const VisitaListScreen = () => {
         <FlatList
             data={visitas}
             keyExtractor={e => e.id.toString()}
-            renderItem={({ item }) => (<VisitaCard visita={item}
-            />)}
+            renderItem={({ item }) => (<VisitaCard visita={item} height={height} width={width} />)}
         />
     )
 }

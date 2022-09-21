@@ -12,7 +12,7 @@ export const MainMenuScreen = () => {
             <View style={styles.menuContainer}>
                 <View style={[styles.rowMenu, { marginBottom: 80 }]}>
                     <MenuItem helperText="Dashboard" icon={icons.dashboard} route="visita_list" />
-                    <MenuItem helperText="Clientes" icon={icons.clients} route="visita_list" />
+                    <MenuItem helperText="Clientes" icon={icons.clients} route="cliente_list" />
                 </View>
                 <View style={styles.rowMenu}>
                     <MenuItem helperText="Visitas" icon={icons.visit} route="visita_list" />
