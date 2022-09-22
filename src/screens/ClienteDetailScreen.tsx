@@ -1,14 +1,15 @@
 import { FC, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, ScrollView, useWindowDimensions } from 'react-native';
 import MapView, { Marker } from "react-native-maps";
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import openMap from "react-native-open-maps";
 import { AppNavigationType } from '../types/navigation_types';
 import { colors } from '../constants';
+
 
 type props = NativeStackScreenProps<AppNavigationType, "cliente_detail">;
 
 export const ClienteDetailScreen: FC<props> = ({ route, navigation }) => {
+    const { height } = useWindowDimensions();
     const { cliente } = route.params;
 
     useEffect(() => {
@@ -18,18 +19,9 @@ export const ClienteDetailScreen: FC<props> = ({ route, navigation }) => {
         })
     }, [navigation]);
 
-    const openAppMap = () => {
-        openMap({
-            latitude: cliente.latitud,
-            longitude: cliente.longitud,
-            zoom: 19,
-            query: cliente.nombre,
-        });
-    };
-
     return (
-        <>
-            <View style={{ height: "25%", width: "100%", backgroundColor: colors.primary }}>
+        <ScrollView>
+            <View style={{ height: height * 0.20, width: "100%", backgroundColor: colors.primary }}>
                 <Text style={{ color: colors.white, fontWeight: "bold", fontSize: 18, bottom: 15, left: 10, position: "absolute" }}>{cliente.nombre}</Text>
             </View>
             <View style={{ padding: 15 }}>
@@ -47,14 +39,15 @@ export const ClienteDetailScreen: FC<props> = ({ route, navigation }) => {
                 </View>
                 <View style={{ marginBottom: 10, marginTop: 10 }}>
                     <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Ubicación</Text>
-                    <MapView
-                        onPress={openAppMap}
-                        style={{ height: 130, width: "100%", }}
-                        initialRegion={{ latitude: cliente.latitud, longitude: cliente.longitud, latitudeDelta: 0, longitudeDelta: 0 }}>
-                        <Marker coordinate={{ latitude: cliente.latitud, longitude: cliente.longitud }} />
-                    </MapView>
+                    <View style={{ height: height*0.30, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
+                        <MapView
+                            style={{ width: "100%", height: "100%", borderRadius: 3 }}
+                            initialRegion={{ latitude: cliente.latitud, longitude: cliente.longitud, latitudeDelta: 0, longitudeDelta: 0 }}>
+                            <Marker coordinate={{ latitude: cliente.latitud, longitude: cliente.longitud }} />
+                        </MapView>
+                    </View>
                 </View>
             </View>
-        </>
+        </ScrollView>
     )
 }
