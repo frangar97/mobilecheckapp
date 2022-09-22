@@ -2,33 +2,19 @@ import { FC, useEffect, useState } from "react";
 import { Text, TouchableOpacity, FlatList, useWindowDimensions } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AppNavigationType } from "../types/navigation_types";
-import { useUsuario } from "../store/useUsuario";
-import axios from "axios";
 import { Cliente } from "../types/cliente_types";
-import { apiURL, colors } from "../constants";
+import { colors } from "../constants";
+import { useCliente } from "../store/useCliente";
 
 type props = NativeStackScreenProps<AppNavigationType, "cliente_list">;
 
 export const ClienteListScreen: FC<props> = ({ navigation }) => {
-    const token = useUsuario(e => e.token);
     const { width } = useWindowDimensions();
-    const [clientes, setClientes] = useState<Cliente[]>([]);
+    const clientes = useCliente(e => e.clientes);
     const [clientesTemporal, setClientesTemporal] = useState<Cliente[]>([]);
 
-    const obtenerClientes = async () => {
-        try {
-            const request = await axios.get<Cliente[]>(`${apiURL}/api/v1/movil/cliente`, { headers: { "Authorization": `Bearer ${token}` } });
-            const data = request.data;
-            setClientes(data);
-            setClientesTemporal(data);
-        } catch (err) {
-            setClientes([]);
-            setClientesTemporal([]);
-        }
-    }
-
     useEffect(() => {
-        obtenerClientes();
+        setClientesTemporal(clientes);
     }, [])
 
     useEffect(() => {
@@ -62,9 +48,10 @@ export const ClienteListScreen: FC<props> = ({ navigation }) => {
         <FlatList
             data={clientesTemporal}
             keyExtractor={e => e.id.toString()}
-            renderItem={({ item }) => (<TouchableOpacity style={{ width: width * 0.9, alignSelf: "center", borderWidth: 0.5, backgroundColor: colors.white, padding: 15, marginTop: 8, borderRadius: 3, borderColor: "#cccc" }}>
-                <Text>{item.nombre}</Text>
-            </TouchableOpacity>)}
+            renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => { navigation.navigate("cliente_detail", { cliente: item }) }} style={{ width: width * 0.9, alignSelf: "center", borderWidth: 0.5, backgroundColor: colors.white, padding: 15, marginTop: 8, borderRadius: 3, borderColor: "#cccc" }}>
+                    <Text>{item.nombre}</Text>
+                </TouchableOpacity>)}
         />
     )
 }

@@ -3,10 +3,12 @@ import { useState } from "react";
 import { Alert, Image, StyleSheet, useWindowDimensions, View } from "react-native"
 import { CustomButton, CustomInput } from "../components";
 import { apiURL, icons } from "../constants";
+import { useCliente } from "../store/useCliente";
 import { useUsuario } from "../store/useUsuario";
 
 export const LoginScreen = () => {
-    const { guardarUsuario } = useUsuario();
+    const guardarUsuario = useUsuario(e => e.guardarUsuario);
+    const obtenerClientes = useCliente(e => e.obtenerClientes);
     const { height } = useWindowDimensions();
     const [usuario, setUsuario] = useState("");
     const [password, setPassword] = useState("");
@@ -20,6 +22,7 @@ export const LoginScreen = () => {
 
             const request = await axios.post<{ usuario: string, token: string }>(`${apiURL}/api/v1/movil/login`, { usuario, password });
             const data = request.data;
+            obtenerClientes(data.token);
             guardarUsuario(data.usuario, data.token);
         } catch (err) {
             Alert.alert("Inicio Sesión", "Ocurrio un error y no se pudo iniciar sesión.");
