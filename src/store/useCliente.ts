@@ -7,12 +7,13 @@ import { Cliente } from '../types/cliente_types';
 
 interface ClienteState {
     clientes: Cliente[],
-    obtenerClientes: (token: string) => void
+    obtenerClientes: (token: string) => void,
+    guardarCliente: (cliente: Cliente) => void
 }
 
 export const useCliente = create<ClienteState>()(
     persist(
-        (set) => ({
+        (set, get) => ({
             clientes: [],
             async obtenerClientes(token) {
                 try {
@@ -22,6 +23,10 @@ export const useCliente = create<ClienteState>()(
                 } catch (err) {
 
                 }
+            },
+            guardarCliente(cliente) {
+                const clientes = get().clientes;
+                set({ clientes: [...clientes, cliente] });
             },
         }),
         {
