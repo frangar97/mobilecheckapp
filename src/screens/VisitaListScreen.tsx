@@ -8,7 +8,7 @@ import { Visita } from '../types/visita_types';
 import { VisitaCard } from '../components';
 import { AppNavigationType } from '../types/navigation_types';
 
-type props = NativeStackScreenProps<AppNavigationType, "cliente_list">
+type props = NativeStackScreenProps<AppNavigationType, "visita_list">
 
 export const VisitaListScreen: FC<props> = ({ navigation }) => {
     const token = useUsuario(e => e.token);

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
+import { openSettings } from "react-native-permissions";
 import { MenuItem } from "../components";
 import { colors, icons } from "../constants";
 import { askLocationPermission, checkLocationPermission } from "../utils/location";
@@ -9,8 +10,12 @@ export const MainMenuScreen = () => {
     const verificarPermisos = async () => {
         let permiso = await checkLocationPermission();
 
-        if (permiso === "blocked" || permiso === "denied") {
-            permiso = await askLocationPermission();
+        if (permiso === "blocked") {
+            openSettings();
+        }
+
+        if (permiso === "denied") {
+            await askLocationPermission();
         }
     }
 

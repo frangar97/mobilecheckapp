@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { ClienteDetailScreen, ClienteListScreen, MainMenuScreen, VisitaListScreen } from "../screens";
+import { ClienteCreateScreen, ClienteDetailScreen, ClienteListScreen, MainMenuScreen, VisitaListScreen } from "../screens";
 import { AppNavigationType } from "../types/navigation_types";
 
 const Stack = createNativeStackNavigator<AppNavigationType>();
@@ -12,6 +12,7 @@ export const AppNavigation = () => {
             <Stack.Screen name="visita_list" component={VisitaListScreen} />
             <Stack.Screen name="cliente_list" component={ClienteListScreen} />
             <Stack.Screen name="cliente_detail" component={ClienteDetailScreen} />
+            <Stack.Screen name="cliente_create" component={ClienteCreateScreen} />
         </Stack.Navigator>
     )
 }
