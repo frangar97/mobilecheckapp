@@ -41,7 +41,8 @@ export const ClienteCreateScreen: FC<props> = ({ navigation }) => {
 
         if (permiso === "denied" || permiso === "blocked") {
             Alert.alert("Ubicación", "Por favor otorge permisos de ubicación para poder usar esta función.",
-                [{ text: "Ok", onPress: () => { navigation.goBack(); } }]);
+                [{ text: "Ok", onPress: () => { openSettings(); } }]);
+            return;
         }
 
         Geolocation.getCurrentPosition(

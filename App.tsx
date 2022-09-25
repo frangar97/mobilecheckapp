@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
-import { ActivityIndicator, SafeAreaView, Text } from 'react-native';
+import { ActivityIndicator, SafeAreaView, Text, LogBox } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { AppNavigation } from './src/navigation/AppNavigation';
 import { useUsuario } from './src/store/useUsuario';
 import { AuthNavigation } from './src/navigation/AuthNavigation';
 import { enableLatestRenderer } from 'react-native-maps';
 import { useCliente } from './src/store/useCliente';
+LogBox.ignoreAllLogs();
 enableLatestRenderer();
 
 const App = () => {
