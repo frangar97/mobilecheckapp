@@ -6,15 +6,18 @@ import { useUsuario } from './src/store/useUsuario';
 import { AuthNavigation } from './src/navigation/AuthNavigation';
 import { enableLatestRenderer } from 'react-native-maps';
 import { useCliente } from './src/store/useCliente';
+import { useTipoVisita } from './src/store/useTipoVisita';
 LogBox.ignoreAllLogs();
 enableLatestRenderer();
 
 const App = () => {
   const { sesionActiva, _hasHydrated, token } = useUsuario();
   const obtenerClientes = useCliente(e => e.obtenerClientes);
+  const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
 
   useEffect(() => {
     if (_hasHydrated && sesionActiva) {
+      obtenerTiposVisita(token);
       obtenerClientes(token);
     }
   }, [_hasHydrated, sesionActiva]);

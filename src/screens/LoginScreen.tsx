@@ -4,11 +4,13 @@ import { Alert, Image, StyleSheet, useWindowDimensions, View } from "react-nativ
 import { CustomButton, CustomInput } from "../components";
 import { apiURL, icons } from "../constants";
 import { useCliente } from "../store/useCliente";
+import { useTipoVisita } from "../store/useTipoVisita";
 import { useUsuario } from "../store/useUsuario";
 
 export const LoginScreen = () => {
     const guardarUsuario = useUsuario(e => e.guardarUsuario);
     const obtenerClientes = useCliente(e => e.obtenerClientes);
+    const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
     const { height } = useWindowDimensions();
     const [usuario, setUsuario] = useState("");
     const [password, setPassword] = useState("");
@@ -22,6 +24,7 @@ export const LoginScreen = () => {
 
             const request = await axios.post<{ usuario: string, token: string }>(`${apiURL}/api/v1/movil/login`, { usuario, password });
             const data = request.data;
+            obtenerTiposVisita(data.token);
             obtenerClientes(data.token);
             guardarUsuario(data.usuario, data.token);
         } catch (err) {
