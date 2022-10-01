@@ -88,7 +88,7 @@ export const ClienteCreateScreen: FC<props> = ({ navigation }) => {
     if (loading) {
         return (
             <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                <ActivityIndicator size="large" color={colors.primary}/>
+                <ActivityIndicator size="large" color={colors.primary} />
                 <Text>Obteniendo ubicación</Text>
             </View>
         )
