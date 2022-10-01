@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Alert, Image, StyleSheet, useWindowDimensions, View } from "react-native"
 import { CustomButton, CustomInput } from "../components";
-import { apiURL, icons } from "../constants";
+import { apiURL, icons, images } from "../constants";
 import { useCliente } from "../store/useCliente";
 import { useTipoVisita } from "../store/useTipoVisita";
 import { useUsuario } from "../store/useUsuario";
@@ -34,7 +34,7 @@ export const LoginScreen = () => {
 
     return (
         <View style={styles.root}>
-            <Image source={icons.visit} style={[styles.logo, { height: height * 0.3 }]} resizeMode="contain" />
+            <Image source={images.logo} style={[styles.logo, { height: height * 0.3 }]} resizeMode="contain" />
             <CustomInput placeholder="usuario" value={usuario} setValue={setUsuario} />
             <CustomInput placeholder="password" value={password} setValue={setPassword} secureTextEntry />
             <CustomButton text="Iniciar Sesión" onPress={iniciarSesion} />
@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
     logo: {
         width: "70%",
         maxWidth: 300,
-        maxHeight: 100,
-        marginBottom: 30
+        maxHeight: 300,
     }
 });

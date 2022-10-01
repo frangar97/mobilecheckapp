@@ -3,6 +3,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { AppNavigationType } from "../types/navigation_types"
+import { colors } from "../constants"
 
 type Props = {
     icon: any
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     helperText: {
         textAlign: "center",
         fontWeight: "bold",
-        color: 'black',
+        color: colors.white,
         marginTop: 5
     }
 });

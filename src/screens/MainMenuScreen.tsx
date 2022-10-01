@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { openSettings } from "react-native-permissions";
 import { MenuItem } from "../components";
-import { colors, icons } from "../constants";
+import { colors, icons, images } from "../constants";
 import { askLocationPermission, checkLocationPermission } from "../utils/location";
 
 export const MainMenuScreen = () => {
@@ -26,7 +26,7 @@ export const MainMenuScreen = () => {
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
-                <Image source={icons.visit} style={styles.welcomeImage} />
+                <Image source={images.logo} style={styles.welcomeImage} />
             </View>
             <View style={styles.menuContainer}>
                 <View style={[styles.rowMenu, { marginBottom: 80 }]}>
@@ -45,7 +45,7 @@ export const MainMenuScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.primary,
+        backgroundColor: colors.white,
         flex: 1
     },
     headerContainer: {
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     menuContainer: {
-        backgroundColor: colors.white,
+        backgroundColor: colors.primary,
         flex: 1,
         justifyContent: "center",
         borderTopRightRadius: 30,
