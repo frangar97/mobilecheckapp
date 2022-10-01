@@ -20,7 +20,7 @@ export const VisitaListScreen: FC<props> = ({ navigation }) => {
             headerTitle: "Visitas",
             headerShown: true,
             headerRight: () => (
-                <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: 30, height: 30, borderColor: "#cccc", borderWidth: 0.5, borderRadius: 4, justifyContent: "center", alignItems: "center" }}>
+                <TouchableOpacity onPress={() => navigation.navigate("visita_cliente_list")} style={{ width: 30, height: 30, borderColor: "#cccc", borderWidth: 0.5, borderRadius: 4, justifyContent: "center", alignItems: "center" }}>
                     <Text style={{ fontSize: 20 }}>+</Text>
                 </TouchableOpacity>),
         })

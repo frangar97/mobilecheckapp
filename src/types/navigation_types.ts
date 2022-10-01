@@ -6,4 +6,5 @@ export type AppNavigationType = {
     cliente_detail: { cliente: Cliente },
     cliente_create: undefined,
     visita_list: undefined,
+    visita_cliente_list: undefined
 }
