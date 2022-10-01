@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ActivityIndicator, SafeAreaView, Text, LogBox } from 'react-native';
+import { SafeAreaView, LogBox } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { AppNavigation } from './src/navigation/AppNavigation';
 import { useUsuario } from './src/store/useUsuario';
@@ -7,6 +7,7 @@ import { AuthNavigation } from './src/navigation/AuthNavigation';
 import { enableLatestRenderer } from 'react-native-maps';
 import { useCliente } from './src/store/useCliente';
 import { useTipoVisita } from './src/store/useTipoVisita';
+import SplashScreen from 'react-native-splash-screen';
 LogBox.ignoreAllLogs();
 enableLatestRenderer();
 
@@ -19,17 +20,13 @@ const App = () => {
     if (_hasHydrated && sesionActiva) {
       obtenerTiposVisita(token);
       obtenerClientes(token);
+      SplashScreen.hide();
+    }
+
+    if (_hasHydrated && !sesionActiva) {
+      SplashScreen.hide();
     }
   }, [_hasHydrated, sesionActiva]);
-
-  if (!_hasHydrated) {
-    return (
-      <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Verificando sesión</Text>
-      </SafeAreaView>
-    )
-  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
