@@ -9,7 +9,7 @@ import { AppNavigationType } from '../types/navigation_types';
 import { askLocationPermission, checkLocationPermission } from '../utils/location';
 import { CustomButton, CustomInput } from "../components";
 import { useUsuario } from '../store/useUsuario';
-import { apiURL } from '../constants';
+import { apiURL, colors } from '../constants';
 import { Cliente } from '../types/cliente_types';
 import { useCliente } from '../store/useCliente';
 
@@ -88,7 +88,7 @@ export const ClienteCreateScreen: FC<props> = ({ navigation }) => {
     if (loading) {
         return (
             <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                <ActivityIndicator size="large" />
+                <ActivityIndicator size="large" color={colors.primary}/>
                 <Text>Obteniendo ubicación</Text>
             </View>
         )
