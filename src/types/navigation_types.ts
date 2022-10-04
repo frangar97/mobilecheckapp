@@ -1,6 +1,7 @@
 import { Cliente } from "./cliente_types"
 
 export type AppNavigationType = {
+    dashboard: undefined,
     mainmenu: undefined,
     cliente_list: undefined,
     cliente_detail: { cliente: Cliente },
