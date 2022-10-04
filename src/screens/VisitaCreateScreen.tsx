@@ -1,15 +1,18 @@
 import { FC, useEffect, useState } from "react";
-import { Alert, Text, View, ActivityIndicator, useWindowDimensions, ScrollView, TouchableOpacity, ImageBackground } from "react-native";
+import { Alert, Text, View, ActivityIndicator, useWindowDimensions, ScrollView, TouchableOpacity, ImageBackground, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AppNavigationType } from "../types/navigation_types";
-import { askLocationPermission, checkLocationPermission } from "../utils/location";
+import SelectDropdown from 'react-native-select-dropdown'
 import { openSettings } from "react-native-permissions";
 import Geolocation from "@react-native-community/geolocation";
+import { ImagePickerResponse, launchCamera } from "react-native-image-picker";
+import { AppNavigationType } from "../types/navigation_types";
+import { askLocationPermission, checkLocationPermission } from "../utils/location";
 import { colors } from "../constants";
 import { CustomButton, CustomInput } from "../components";
-import { ImagePickerResponse, launchCamera } from "react-native-image-picker";
+import { useTipoVisita } from "../store/useTipoVisita";
+
 
 
 type props = NativeStackScreenProps<AppNavigationType, "visita_create">;
@@ -21,7 +24,9 @@ export const VisitaCreateScreen: FC<props> = ({ navigation }) => {
     const [comentario, setComentario] = useState("");
     const [tempUri, setTempUri] = useState<string>();
     const [imageResponse, setImageResponse] = useState<ImagePickerResponse>();
+    const [tipoVisitaId, setTipoVisitaId] = useState<number>();
     const { height } = useWindowDimensions();
+    const tiposVisita = useTipoVisita(e => e.tiposVisita);
 
     const obtenerUbicacionActual = async () => {
         let permiso = await checkLocationPermission();
@@ -95,6 +100,31 @@ export const VisitaCreateScreen: FC<props> = ({ navigation }) => {
                 <Text style={{ fontSize: 16, fontWeight: "bold" }}>Comentario</Text>
                 <CustomInput placeholder="Comentario" value={comentario} setValue={setComentario} />
             </View>
+            <View style={{ marginBottom: 10 }}>
+                <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>Tipo Visita</Text>
+                <SelectDropdown
+                    data={tiposVisita}
+                    onSelect={(selectedItem, index) => {
+                        setTipoVisitaId(selectedItem.id);
+                    }}
+                    defaultButtonText={' '}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem.nombre;
+                    }}
+                    rowTextForSelection={(item, index) => {
+                        return item.nombre;
+                    }}
+                    buttonStyle={styles.dropdown1BtnStyle}
+                    buttonTextStyle={styles.dropdown1BtnTxtStyle}
+                    renderDropdownIcon={isOpened => {
+                        return <Icon name={isOpened ? 'arrow-drop-up' : 'arrow-drop-down'} color={'#444'} size={18} />;
+                    }}
+                    dropdownIconPosition={'right'}
+                    dropdownStyle={styles.dropdown1DropdownStyle}
+                    rowStyle={styles.dropdown1RowStyle}
+                    rowTextStyle={styles.dropdown1RowTxtStyle}
+                />
+            </View>
             <View style={{ marginBottom: 10, marginTop: 10 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>Fotografia</Text>
                 <View style={{ height: height * 0.20, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
@@ -131,3 +161,29 @@ export const VisitaCreateScreen: FC<props> = ({ navigation }) => {
         </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    dropdown1BtnStyle: {
+        width: '100%',
+        height: 50,
+        backgroundColor: '#FFF',
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#ccc',
+    },
+    dropdown1BtnTxtStyle: {
+
+        textAlign: 'left'
+    },
+    dropdown1DropdownStyle: {
+        backgroundColor: '#EFEFEF'
+    },
+    dropdown1RowStyle: {
+        backgroundColor: '#EFEFEF',
+        borderBottomColor: '#C5C5C5'
+    },
+    dropdown1RowTxtStyle: {
+
+        textAlign: 'left'
+    }
+})
