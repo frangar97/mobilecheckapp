@@ -7,5 +7,5 @@ export type AppNavigationType = {
     cliente_create: undefined,
     visita_list: undefined,
     visita_cliente_list: undefined,
-    visita_create: undefined
+    visita_create: { clienteId: number }
 }

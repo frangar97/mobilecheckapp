@@ -9,15 +9,19 @@ import Geolocation from "@react-native-community/geolocation";
 import { ImagePickerResponse, launchCamera } from "react-native-image-picker";
 import { AppNavigationType } from "../types/navigation_types";
 import { askLocationPermission, checkLocationPermission } from "../utils/location";
-import { colors } from "../constants";
+import { apiURL, colors } from "../constants";
 import { CustomButton, CustomInput } from "../components";
 import { useTipoVisita } from "../store/useTipoVisita";
+import axios from "axios";
+import { useUsuario } from "../store/useUsuario";
+import { format } from "date-fns";
 
 
 
 type props = NativeStackScreenProps<AppNavigationType, "visita_create">;
 
-export const VisitaCreateScreen: FC<props> = ({ navigation }) => {
+export const VisitaCreateScreen: FC<props> = ({ navigation, route }) => {
+    const clienteId = route.params.clienteId;
     const [loading, setLoading] = useState(true);
     const [latitud, setLatitud] = useState(0);
     const [longitud, setLongitud] = useState(0);
@@ -27,6 +31,7 @@ export const VisitaCreateScreen: FC<props> = ({ navigation }) => {
     const [tipoVisitaId, setTipoVisitaId] = useState<number>();
     const { height } = useWindowDimensions();
     const tiposVisita = useTipoVisita(e => e.tiposVisita);
+    const token = useUsuario(e => e.token);
 
     const obtenerUbicacionActual = async () => {
         let permiso = await checkLocationPermission();
@@ -74,6 +79,36 @@ export const VisitaCreateScreen: FC<props> = ({ navigation }) => {
         });
     }
 
+    const crearVisita = async () => {
+        try {
+            if (imageResponse === undefined || tipoVisitaId === undefined || comentario === "") {
+                Alert.alert("Visita", "Los campos de comentario, fotografia y tipo de visita son obligatorios.");
+                return;
+            }
+
+            const fileToUpload = {
+                uri: imageResponse!.assets![0].uri,
+                type: imageResponse!.assets![0].type,
+                name: imageResponse!.assets![0].fileName
+            }
+
+            let formData = new FormData();
+            formData.append("imagen", fileToUpload);
+            formData.append("comentario", comentario);
+            formData.append("fecha", format(new Date(), "yyyy-MM-dd h:m"));
+            formData.append("latitud", latitud);
+            formData.append("longitud", longitud);
+            formData.append("tipoVisitaId", tipoVisitaId);
+            formData.append("clienteId", clienteId);
+
+            await axios.post(`${apiURL}/api/v1/movil/visita`, formData, { headers: { "Authorization": `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } });
+            navigation.pop(2);
+            Alert.alert("Visita", "Visita creada con exito.");
+        } catch (err: any) {
+            Alert.alert("Visita", "ocurrio un error y no se pudo registrar la visita.");
+        }
+    }
+
     useEffect(() => {
         obtenerUbicacionActual();
     }, []);
@@ -105,6 +140,7 @@ export const VisitaCreateScreen: FC<props> = ({ navigation }) => {
                 <SelectDropdown
                     data={tiposVisita}
                     onSelect={(selectedItem, index) => {
+                        console.log(selectedItem.id)
                         setTipoVisitaId(selectedItem.id);
                     }}
                     defaultButtonText={' '}
@@ -155,8 +191,8 @@ export const VisitaCreateScreen: FC<props> = ({ navigation }) => {
                     </MapView>
                 </View>
             </View>
-            <View style={{ marginBottom: 10 }}>
-                <CustomButton text="Crear Visita" onPress={() => { console.log("visita creada") }} />
+            <View style={{ marginBottom: 20 }}>
+                <CustomButton text="Crear Visita" onPress={crearVisita} />
             </View>
         </ScrollView>
     )

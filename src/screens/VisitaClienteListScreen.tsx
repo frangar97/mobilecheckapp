@@ -42,7 +42,7 @@ export const VisitaClienteListScreen: FC<props> = ({ navigation }) => {
             data={clientesTemporal}
             keyExtractor={e => e.id.toString()}
             renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => { navigation.navigate("visita_create") }} style={{ width: width * 0.9, alignSelf: "center", borderWidth: 0.5, backgroundColor: colors.white, padding: 15, marginTop: 8, borderRadius: 3, borderColor: "#cccc" }}>
+                <TouchableOpacity onPress={() => { navigation.navigate("visita_create", { clienteId: item.id }) }} style={{ width: width * 0.9, alignSelf: "center", borderWidth: 0.5, backgroundColor: colors.white, padding: 15, marginTop: 8, borderRadius: 3, borderColor: "#cccc" }}>
                     <Text>{item.nombre}</Text>
                 </TouchableOpacity>)}
             estimatedItemSize={clientes.length}
