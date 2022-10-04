@@ -8,8 +8,8 @@ import { askLocationPermission, checkLocationPermission } from "../utils/locatio
 import { openSettings } from "react-native-permissions";
 import Geolocation from "@react-native-community/geolocation";
 import { colors } from "../constants";
-import { CustomButton } from "../components";
-import { launchCamera } from "react-native-image-picker";
+import { CustomButton, CustomInput } from "../components";
+import { ImagePickerResponse, launchCamera } from "react-native-image-picker";
 
 
 type props = NativeStackScreenProps<AppNavigationType, "visita_create">;
@@ -18,7 +18,9 @@ export const VisitaCreateScreen: FC<props> = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
     const [latitud, setLatitud] = useState(0);
     const [longitud, setLongitud] = useState(0);
+    const [comentario, setComentario] = useState("");
     const [tempUri, setTempUri] = useState<string>();
+    const [imageResponse, setImageResponse] = useState<ImagePickerResponse>();
     const { height } = useWindowDimensions();
 
     const obtenerUbicacionActual = async () => {
@@ -63,6 +65,7 @@ export const VisitaCreateScreen: FC<props> = ({ navigation }) => {
             if (!resp.assets) return;
 
             setTempUri(resp.assets[0].uri);
+            setImageResponse(resp);
         });
     }
 
@@ -72,7 +75,7 @@ export const VisitaCreateScreen: FC<props> = ({ navigation }) => {
 
     useEffect(() => {
         navigation.setOptions({
-            headerTitle: "Seleccione Cliente",
+            headerTitle: "Crear visita",
             headerShown: true,
         })
     }, [navigation]);
@@ -88,6 +91,10 @@ export const VisitaCreateScreen: FC<props> = ({ navigation }) => {
 
     return (
         <ScrollView style={{ padding: 15 }}>
+            <View style={{ marginBottom: 10 }}>
+                <Text style={{ fontSize: 16, fontWeight: "bold" }}>Comentario</Text>
+                <CustomInput placeholder="Comentario" value={comentario} setValue={setComentario} />
+            </View>
             <View style={{ marginBottom: 10, marginTop: 10 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>Fotografia</Text>
                 <View style={{ height: height * 0.20, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>

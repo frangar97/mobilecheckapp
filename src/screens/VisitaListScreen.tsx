@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { FlatList, useWindowDimensions, Text, TouchableOpacity } from 'react-native'
+import { useWindowDimensions, Text, TouchableOpacity } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import axios from 'axios';
 import { apiURL } from '../constants';
@@ -7,6 +7,7 @@ import { useUsuario } from '../store/useUsuario'
 import { Visita } from '../types/visita_types';
 import { VisitaCard } from '../components';
 import { AppNavigationType } from '../types/navigation_types';
+import { FlashList } from '@shopify/flash-list';
 
 type props = NativeStackScreenProps<AppNavigationType, "visita_list">
 
@@ -41,10 +42,11 @@ export const VisitaListScreen: FC<props> = ({ navigation }) => {
     }, []);
 
     return (
-        <FlatList
+        <FlashList
             data={visitas}
             keyExtractor={e => e.id.toString()}
             renderItem={({ item }) => (<VisitaCard visita={item} height={height} width={width} />)}
+            estimatedItemSize={visitas.length}
         />
     )
 }

@@ -1,10 +1,11 @@
 import { FC, useEffect, useState } from "react";
-import { Text, TouchableOpacity, FlatList, useWindowDimensions } from "react-native";
+import { Text, TouchableOpacity, useWindowDimensions } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AppNavigationType } from "../types/navigation_types";
 import { Cliente } from "../types/cliente_types";
 import { colors } from "../constants";
 import { useCliente } from "../store/useCliente";
+import { FlashList } from "@shopify/flash-list";
 
 type props = NativeStackScreenProps<AppNavigationType, "visita_cliente_list">;
 
@@ -37,13 +38,14 @@ export const VisitaClienteListScreen: FC<props> = ({ navigation }) => {
     }, [navigation]);
 
     return (
-        <FlatList
+        <FlashList
             data={clientesTemporal}
             keyExtractor={e => e.id.toString()}
             renderItem={({ item }) => (
                 <TouchableOpacity onPress={() => { navigation.navigate("visita_create") }} style={{ width: width * 0.9, alignSelf: "center", borderWidth: 0.5, backgroundColor: colors.white, padding: 15, marginTop: 8, borderRadius: 3, borderColor: "#cccc" }}>
                     <Text>{item.nombre}</Text>
                 </TouchableOpacity>)}
+            estimatedItemSize={clientes.length}
         />
     )
 }
