@@ -37,7 +37,7 @@ export const MainMenuScreen = () => {
                     <Icon name='logout' color={colors.primary} size={35} />
                 </TouchableOpacity>
 
-                <Icon name='update' color={colors.primary} size={35} />
+                <Icon name='autorenew' color={colors.primary} size={35} />
             </View>
             <View style={styles.headerContainer}>
                 <Image source={images.logo} style={styles.welcomeImage} />
