@@ -3,10 +3,7 @@ import { useState } from "react";
 import { Alert, Image, StyleSheet, useWindowDimensions, View } from "react-native"
 import { CustomButton, CustomInput } from "../components";
 import { apiURL, images } from "../constants";
-import { useCliente } from "../store/useCliente";
-import { useTipoVisita } from "../store/useTipoVisita";
-import { useUsuario } from "../store/useUsuario";
-import { useVisita } from "../store/useVisita";
+import { useVisita, useUsuario, useCliente, useTipoVisita } from "../store";
 
 export const LoginScreen = () => {
     const guardarUsuario = useUsuario(e => e.guardarUsuario);

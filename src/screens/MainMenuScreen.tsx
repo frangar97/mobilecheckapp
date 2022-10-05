@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
 import { openSettings } from "react-native-permissions";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { MenuItem } from "../components";
-import { useUsuario } from '../store/useUsuario';
+import { useUsuario } from '../store';
 import { colors, icons, images } from "../constants";
 import { askLocationPermission, checkLocationPermission } from "../utils/location";
 

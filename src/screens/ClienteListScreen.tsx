@@ -5,7 +5,7 @@ import { FlashList } from "@shopify/flash-list";
 import { AppNavigationType } from "../types/navigation_types";
 import { Cliente } from "../types/cliente_types";
 import { colors } from "../constants";
-import { useCliente } from "../store/useCliente";
+import { useCliente } from "../store";
 
 type props = NativeStackScreenProps<AppNavigationType, "cliente_list">;
 

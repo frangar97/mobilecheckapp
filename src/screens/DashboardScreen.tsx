@@ -1,9 +1,7 @@
 import { Text, View, ScrollView, StyleSheet } from 'react-native';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { colors } from '../constants';
-import { useCliente } from '../store/useCliente';
-import { useUsuario } from '../store/useUsuario';
-import { useVisita } from '../store/useVisita';
+import { useVisita, useCliente, useUsuario } from '../store';
 
 export const DashboardScreen = () => {
     const usuario = useUsuario(e => e.usuario);

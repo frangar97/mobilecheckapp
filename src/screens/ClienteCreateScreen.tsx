@@ -8,10 +8,9 @@ import { openSettings } from 'react-native-permissions';
 import { AppNavigationType } from '../types/navigation_types';
 import { askLocationPermission, checkLocationPermission } from '../utils/location';
 import { CustomButton, CustomInput } from "../components";
-import { useUsuario } from '../store/useUsuario';
 import { apiURL, colors } from '../constants';
 import { Cliente } from '../types/cliente_types';
-import { useCliente } from '../store/useCliente';
+import { useCliente, useUsuario } from '../store';
 
 
 type props = NativeStackScreenProps<AppNavigationType, "cliente_create">;

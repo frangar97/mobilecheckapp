@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AppNavigationType } from "../types/navigation_types";
 import { Cliente } from "../types/cliente_types";
 import { colors } from "../constants";
-import { useCliente } from "../store/useCliente";
+import { useCliente } from "../store";
 import { FlashList } from "@shopify/flash-list";
 
 type props = NativeStackScreenProps<AppNavigationType, "visita_cliente_list">;

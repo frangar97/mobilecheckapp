@@ -11,12 +11,10 @@ import { AppNavigationType } from "../types/navigation_types";
 import { askLocationPermission, checkLocationPermission } from "../utils/location";
 import { apiURL, colors } from "../constants";
 import { CustomButton, CustomInput } from "../components";
-import { useTipoVisita } from "../store/useTipoVisita";
 import axios from "axios";
-import { useUsuario } from "../store/useUsuario";
 import { format } from "date-fns";
 import { Visita } from "../types/visita_types";
-import { useVisita } from "../store/useVisita";
+import { useVisita, useTipoVisita, useUsuario } from "../store";
 
 
 

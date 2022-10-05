@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { VisitaCard } from '../components';
 import { AppNavigationType } from '../types/navigation_types';
 import { FlashList } from '@shopify/flash-list';
-import { useVisita } from '../store/useVisita';
+import { useVisita } from '../store';
 
 type props = NativeStackScreenProps<AppNavigationType, "visita_list">
 
