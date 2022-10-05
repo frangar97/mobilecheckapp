@@ -2,15 +2,17 @@ import axios from "axios";
 import { useState } from "react";
 import { Alert, Image, StyleSheet, useWindowDimensions, View } from "react-native"
 import { CustomButton, CustomInput } from "../components";
-import { apiURL, icons, images } from "../constants";
+import { apiURL, images } from "../constants";
 import { useCliente } from "../store/useCliente";
 import { useTipoVisita } from "../store/useTipoVisita";
 import { useUsuario } from "../store/useUsuario";
+import { useVisita } from "../store/useVisita";
 
 export const LoginScreen = () => {
     const guardarUsuario = useUsuario(e => e.guardarUsuario);
     const obtenerClientes = useCliente(e => e.obtenerClientes);
     const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
+    const obtenerVisitas = useVisita(e => e.obtenerVisitas);
     const { height } = useWindowDimensions();
     const [usuario, setUsuario] = useState("");
     const [password, setPassword] = useState("");
@@ -26,6 +28,7 @@ export const LoginScreen = () => {
             const data = request.data;
             obtenerTiposVisita(data.token);
             obtenerClientes(data.token);
+            obtenerVisitas(data.token);
             guardarUsuario(data.usuario, data.token);
         } catch (err) {
             Alert.alert("Inicio Sesión", "Ocurrio un error y no se pudo iniciar sesión.");

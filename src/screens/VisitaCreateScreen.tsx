@@ -15,6 +15,8 @@ import { useTipoVisita } from "../store/useTipoVisita";
 import axios from "axios";
 import { useUsuario } from "../store/useUsuario";
 import { format } from "date-fns";
+import { Visita } from "../types/visita_types";
+import { useVisita } from "../store/useVisita";
 
 
 
@@ -32,6 +34,7 @@ export const VisitaCreateScreen: FC<props> = ({ navigation, route }) => {
     const { height } = useWindowDimensions();
     const tiposVisita = useTipoVisita(e => e.tiposVisita);
     const token = useUsuario(e => e.token);
+    const guardarVisita = useVisita(e => e.guardarVisita);
 
     const obtenerUbicacionActual = async () => {
         let permiso = await checkLocationPermission();
@@ -101,7 +104,8 @@ export const VisitaCreateScreen: FC<props> = ({ navigation, route }) => {
             formData.append("tipoVisitaId", tipoVisitaId);
             formData.append("clienteId", clienteId);
 
-            await axios.post(`${apiURL}/api/v1/movil/visita`, formData, { headers: { "Authorization": `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } });
+            const request = await axios.post<Visita>(`${apiURL}/api/v1/movil/visita`, formData, { headers: { "Authorization": `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } });
+            await guardarVisita(request.data);
             navigation.pop(2);
             Alert.alert("Visita", "Visita creada con exito.");
         } catch (err: any) {

@@ -65,7 +65,7 @@ export const ClienteCreateScreen: FC<props> = ({ navigation }) => {
         try {
             const request = await axios.post<Cliente>(`${apiURL}/api/v1/movil/cliente`, { nombre, direccion, telefono, email, latitud, longitud }, { headers: { "Authorization": `Bearer ${token}` } });
             const data = request.data;
-            guardarCliente(data);
+            await guardarCliente(data);
             Alert.alert("Cliente", "El cliente ha sido creado con exito.");
             navigation.goBack();
         } catch (err) {

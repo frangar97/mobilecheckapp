@@ -8,7 +8,7 @@ import { Cliente } from '../types/cliente_types';
 interface ClienteState {
     clientes: Cliente[],
     obtenerClientes: (token: string) => void,
-    guardarCliente: (cliente: Cliente) => void
+    guardarCliente: (cliente: Cliente) => Promise<void>
 }
 
 export const useCliente = create<ClienteState>()(
@@ -24,7 +24,7 @@ export const useCliente = create<ClienteState>()(
 
                 }
             },
-            guardarCliente(cliente) {
+            async guardarCliente(cliente) {
                 const clientes = get().clientes;
                 set({ clientes: [...clientes, cliente] });
             },
