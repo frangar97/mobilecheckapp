@@ -3,12 +3,17 @@ import { View, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
 import { openSettings } from "react-native-permissions";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { MenuItem } from "../components";
-import { useUsuario } from '../store';
+import { useUsuario, useCliente, useTipoVisita, useVisita } from '../store';
 import { colors, icons, images } from "../constants";
 import { askLocationPermission, checkLocationPermission } from "../utils/location";
 
 export const MainMenuScreen = () => {
     const cerrarSesion = useUsuario(e => e.cerrarSesion);
+    const token = useUsuario(e => e.token);
+    const obtenerClientes = useCliente(e => e.obtenerClientes);
+    const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
+    const obtenerVisitas = useVisita(e => e.obtenerVisitas);
+
 
     const verificarPermisos = async () => {
         let permiso = await checkLocationPermission();
@@ -23,7 +28,19 @@ export const MainMenuScreen = () => {
     }
 
     const verificarCerrarSesion = () => {
-        Alert.alert("Cerrar sesión", "¿Esta seguro de cerrar sesión?", [{ text: "Si", onPress: () => { cerrarSesion() } }, { text: "No" }])
+        Alert.alert("Cerrar sesión", "¿Esta seguro de cerrar sesión?",
+            [{ text: "Si", onPress: () => { cerrarSesion() } }, { text: "No" }])
+    }
+
+    const verificarActualizacionDatos = () => {
+        Alert.alert("Actualización", "¿Esta seguro de actualizar información del dispositivo?",
+            [{
+                text: "Si", onPress: () => {
+                    obtenerClientes(token);
+                    obtenerTiposVisita(token);
+                    obtenerVisitas(token);
+                }
+            }, { text: "No" }])
     }
 
     useEffect(() => {
@@ -36,8 +53,9 @@ export const MainMenuScreen = () => {
                 <TouchableOpacity onPress={verificarCerrarSesion}>
                     <Icon name='logout' color={colors.primary} size={35} />
                 </TouchableOpacity>
-
-                <Icon name='autorenew' color={colors.primary} size={35} />
+                <TouchableOpacity onPress={verificarActualizacionDatos}>
+                    <Icon name='autorenew' color={colors.primary} size={35} />
+                </TouchableOpacity>
             </View>
             <View style={styles.headerContainer}>
                 <Image source={images.logo} style={styles.welcomeImage} />

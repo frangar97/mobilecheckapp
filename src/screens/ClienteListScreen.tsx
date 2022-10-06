@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from "react";
-import { Text, TouchableOpacity, useWindowDimensions } from "react-native";
+import { Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { FlashList } from "@shopify/flash-list";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import { AppNavigationType } from "../types/navigation_types";
 import { Cliente } from "../types/cliente_types";
 import { colors } from "../constants";
@@ -40,6 +41,15 @@ export const ClienteListScreen: FC<props> = ({ navigation }) => {
             }
         })
     }, [navigation]);
+
+    if (clientes.length === 0) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <Icon name='mood-bad' color={colors.primary} size={35} />
+                <Text>No tiene clientes asignados.</Text>
+            </View>
+        )
+    }
 
     return (
         <FlashList

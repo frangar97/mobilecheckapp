@@ -1,10 +1,12 @@
 import { FC, useEffect } from 'react';
-import { useWindowDimensions, Text, TouchableOpacity } from 'react-native'
+import { useWindowDimensions, Text, TouchableOpacity, View } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import Icon from "react-native-vector-icons/MaterialIcons";
 import { VisitaCard } from '../components';
 import { AppNavigationType } from '../types/navigation_types';
 import { FlashList } from '@shopify/flash-list';
 import { useVisita } from '../store';
+import { colors } from '../constants';
 
 type props = NativeStackScreenProps<AppNavigationType, "visita_list">
 
@@ -22,6 +24,15 @@ export const VisitaListScreen: FC<props> = ({ navigation }) => {
                 </TouchableOpacity>),
         })
     }, [navigation]);
+
+    if (visitas.length === 0) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <Icon name='mood-bad' color={colors.primary} size={35} />
+                <Text>Aún no se han registrado visitas para el dia de hoy.</Text>
+            </View>
+        )
+    }
 
 
     return (
