@@ -68,7 +68,7 @@ export const MainMenuScreen = () => {
                 </View>
                 <View style={styles.rowMenu}>
                     <MenuItem helperText="Visitas" icon={icons.visit} route="visita_list" />
-                    <MenuItem helperText="Tareas" icon={icons.task} route="visita_list" />
+                    <MenuItem helperText="Tareas" icon={icons.task} route="tarea_list" />
                 </View>
             </View>
         </View>

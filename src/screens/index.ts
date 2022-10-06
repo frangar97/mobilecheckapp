@@ -7,6 +7,7 @@ import { ClienteListScreen } from "./ClienteListScreen";
 import { ClienteDetailScreen } from "./ClienteDetailScreen";
 import { ClienteCreateScreen } from "./ClienteCreateScreen";
 import { DashboardScreen } from "./DashboardScreen";
+import { TareaListScreen } from "./TareaListScreen";
 
 export {
     MainMenuScreen,
@@ -17,5 +18,6 @@ export {
     VisitaCreateScreen,
     ClienteListScreen,
     ClienteDetailScreen,
-    ClienteCreateScreen
+    ClienteCreateScreen,
+    TareaListScreen
 }
