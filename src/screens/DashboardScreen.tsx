@@ -1,12 +1,13 @@
 import { Text, View, ScrollView, StyleSheet } from 'react-native';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { colors } from '../constants';
-import { useVisita, useCliente, useUsuario } from '../store';
+import { useVisita, useCliente, useUsuario, useTarea } from '../store';
 
 export const DashboardScreen = () => {
     const usuario = useUsuario(e => e.usuario);
     const clientes = useCliente(e => e.clientes);
     const visitas = useVisita(e => e.visitas);
+    const tareas = useTarea(e => e.tareas);
 
     return (
         <ScrollView style={{ padding: 15 }}>
@@ -27,6 +28,13 @@ export const DashboardScreen = () => {
                     <Text style={{ color: "black", fontSize: 25 }}>{visitas.length}</Text>
                 </View>
                 <Icon name='add-business' color={colors.primary} size={35} />
+            </View>
+            <View style={style.cardContainer}>
+                <View>
+                    <Text style={{ color: "black", fontWeight: "bold" }}>Tareas del dia</Text>
+                    <Text style={{ color: "black", fontSize: 25 }}>{tareas.length}</Text>
+                </View>
+                <Icon name='fact-check' color={colors.primary} size={35} />
             </View>
         </ScrollView>
     )

@@ -3,13 +3,14 @@ import { useState } from "react";
 import { Alert, Image, StyleSheet, useWindowDimensions, View } from "react-native"
 import { CustomButton, CustomInput } from "../components";
 import { apiURL, images } from "../constants";
-import { useVisita, useUsuario, useCliente, useTipoVisita } from "../store";
+import { useVisita, useUsuario, useCliente, useTipoVisita, useTarea } from "../store";
 
 export const LoginScreen = () => {
     const guardarUsuario = useUsuario(e => e.guardarUsuario);
     const obtenerClientes = useCliente(e => e.obtenerClientes);
     const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
     const obtenerVisitas = useVisita(e => e.obtenerVisitas);
+    const obtenerTareas = useTarea(e => e.obtenerTareas);
     const { height } = useWindowDimensions();
     const [usuario, setUsuario] = useState("");
     const [password, setPassword] = useState("");
@@ -26,6 +27,7 @@ export const LoginScreen = () => {
             obtenerTiposVisita(data.token);
             obtenerClientes(data.token);
             obtenerVisitas(data.token);
+            obtenerTareas(data.token);
             guardarUsuario(data.usuario, data.token);
         } catch (err) {
             Alert.alert("Inicio Sesión", "Ocurrio un error y no se pudo iniciar sesión.");

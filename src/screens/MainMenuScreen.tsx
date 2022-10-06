@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
 import { openSettings } from "react-native-permissions";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { MenuItem } from "../components";
-import { useUsuario, useCliente, useTipoVisita, useVisita } from '../store';
+import { useUsuario, useCliente, useTipoVisita, useVisita, useTarea } from '../store';
 import { colors, icons, images } from "../constants";
 import { askLocationPermission, checkLocationPermission } from "../utils/location";
 
@@ -13,7 +13,7 @@ export const MainMenuScreen = () => {
     const obtenerClientes = useCliente(e => e.obtenerClientes);
     const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
     const obtenerVisitas = useVisita(e => e.obtenerVisitas);
-
+    const obtenerTareas = useTarea(e => e.obtenerTareas);
 
     const verificarPermisos = async () => {
         let permiso = await checkLocationPermission();
@@ -39,6 +39,7 @@ export const MainMenuScreen = () => {
                     obtenerClientes(token);
                     obtenerTiposVisita(token);
                     obtenerVisitas(token);
+                    obtenerTareas(token);
                 }
             }, { text: "No" }])
     }
