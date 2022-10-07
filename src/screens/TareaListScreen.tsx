@@ -38,7 +38,7 @@ export const TareaListScreen: FC<props> = ({ navigation }) => {
                 <TouchableOpacity style={style.cardContainer}>
                     <View>
                         <Text style={{ color: "black", fontWeight: "bold" }}>{item.cliente}</Text>
-                        <Text style={{ color: "black" }}>{format(new Date(item.fecha), "HH:mm a")}</Text>
+                        <Text style={{ color: "black" }}>{format(new Date(item.fecha), "hh:mm a")}</Text>
                     </View>
                     <Icon name={item.completada ? "check-circle-outline" : "alarm"} color={item.completada ? "green" : "orange"} size={30} />
                 </TouchableOpacity>)}
