@@ -35,7 +35,14 @@ export const TareaListScreen: FC<props> = ({ navigation }) => {
             data={tareas}
             keyExtractor={e => e.id.toString()}
             renderItem={({ item }) => (
-                <TouchableOpacity style={style.cardContainer}>
+                <TouchableOpacity style={style.cardContainer} onPress={() => {
+
+                    if (item.completada) {
+                        return;
+                    }
+
+                    navigation.navigate("tarea_complete", { clienteId: item.clienteId, tareaId: item.id })
+                }}>
                     <View>
                         <Text style={{ color: "black", fontWeight: "bold" }}>{item.cliente}</Text>
                         <Text style={{ color: "black" }}>{format(new Date(item.fecha), "hh:mm a")}</Text>

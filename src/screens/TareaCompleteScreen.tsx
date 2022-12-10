@@ -14,12 +14,13 @@ import { CustomButton, CustomInput } from "../components";
 import axios from "axios";
 import { format } from "date-fns";
 import { Visita } from "../types/visita_types";
-import { useVisita, useTipoVisita, useUsuario } from "../store";
+import { useVisita, useTipoVisita, useUsuario, useTarea } from "../store";
 
-type props = NativeStackScreenProps<AppNavigationType, "visita_create">;
+type props = NativeStackScreenProps<AppNavigationType, "tarea_complete">;
 
-export const VisitaCreateScreen: FC<props> = ({ navigation, route }) => {
+export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
     const clienteId = route.params.clienteId;
+    const tareaId = route.params.tareaId;
     const [loading, setLoading] = useState(true);
     const [latitud, setLatitud] = useState(0);
     const [longitud, setLongitud] = useState(0);
@@ -30,7 +31,8 @@ export const VisitaCreateScreen: FC<props> = ({ navigation, route }) => {
     const { height } = useWindowDimensions();
     const tiposVisita = useTipoVisita(e => e.tiposVisita);
     const token = useUsuario(e => e.token);
-    const guardarVisita = useVisita(e => e.guardarVisita);
+    const obtenerVisitas = useVisita(e => e.obtenerVisitas);
+    const obtenerTareas = useTarea(e => e.obtenerTareas);
 
     const obtenerUbicacionActual = async () => {
         let permiso = await checkLocationPermission();
@@ -99,13 +101,15 @@ export const VisitaCreateScreen: FC<props> = ({ navigation, route }) => {
             formData.append("longitud", longitud);
             formData.append("tipoVisitaId", tipoVisitaId);
             formData.append("clienteId", clienteId);
+            formData.append("tareaId", tareaId);
 
-            const request = await axios.post<Visita>(`${apiURL}/api/v1/movil/visita`, formData, { headers: { "Authorization": `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } });
-            await guardarVisita(request.data);
-            navigation.pop(2);
-            Alert.alert("Visita", "Visita creada con exito.");
+            const request = await axios.post<Visita>(`${apiURL}/api/v1/movil/tarea/completar`, formData, { headers: { "Authorization": `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } });
+            await obtenerVisitas(token);
+            await obtenerTareas(token);
+            navigation.pop(1);
+            Alert.alert("Tarea", "Tarea completada con exito.");
         } catch (err: any) {
-            Alert.alert("Visita", "ocurrio un error y no se pudo registrar la visita.");
+            Alert.alert("Tarea", "ocurrio un error y no se pudo registrar la tarea.");
         }
     }
 
@@ -115,7 +119,7 @@ export const VisitaCreateScreen: FC<props> = ({ navigation, route }) => {
 
     useEffect(() => {
         navigation.setOptions({
-            headerTitle: "Crear visita",
+            headerTitle: "Completar tarea",
             headerShown: true,
         })
     }, [navigation]);
@@ -192,7 +196,7 @@ export const VisitaCreateScreen: FC<props> = ({ navigation, route }) => {
                 </View>
             </View>
             <View style={{ marginBottom: 20 }}>
-                <CustomButton text="Crear Visita" onPress={crearVisita} />
+                <CustomButton text="Completar Tarea" onPress={crearVisita} />
             </View>
         </ScrollView>
     )
