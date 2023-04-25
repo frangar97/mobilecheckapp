@@ -5,4 +5,5 @@ export interface Tarea {
     completada: boolean
     clienteId: number
     cliente: string
+    imagenRequerida: boolean
 }

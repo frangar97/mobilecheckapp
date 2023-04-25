@@ -41,7 +41,7 @@ export const TareaListScreen: FC<props> = ({ navigation }) => {
                         return;
                     }
 
-                    navigation.navigate("tarea_complete", { clienteId: item.clienteId, tareaId: item.id })
+                    navigation.navigate("tarea_complete", { clienteId: item.clienteId, tareaId: item.id, imagenRequerida: item.imagenRequerida })
                 }}>
                     <View>
                         <Text style={{ color: "black", fontWeight: "bold" }}>{item.cliente}</Text>

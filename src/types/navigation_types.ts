@@ -10,5 +10,5 @@ export type AppNavigationType = {
     visita_cliente_list: undefined,
     visita_create: { clienteId: number },
     tarea_list: undefined,
-    tarea_complete: { clienteId: number, tareaId: number }
+    tarea_complete: { clienteId: number, tareaId: number, imagenRequerida: boolean }
 }

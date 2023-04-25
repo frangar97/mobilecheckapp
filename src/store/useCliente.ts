@@ -4,6 +4,7 @@ import create from 'zustand'
 import { persist } from 'zustand/middleware'
 import { apiURL } from '../constants';
 import { Cliente } from '../types/cliente_types';
+import { format } from "date-fns";
 
 interface ClienteState {
     clientes: Cliente[],
@@ -17,7 +18,7 @@ export const useCliente = create<ClienteState>()(
             clientes: [],
             async obtenerClientes(token) {
                 try {
-                    const request = await axios.get<Cliente[]>(`${apiURL}/api/v1/movil/cliente`, { headers: { "Authorization": `Bearer ${token}` } });
+                    const request = await axios.get<Cliente[]>(`${apiURL}/api/v1/movil/cliente`, { headers: { "Authorization": `Bearer ${token}` }, params: { fecha: format(new Date(), "yyyy-MM-dd") } });
                     const clientes = request.data;
                     set({ clientes });
                 } catch (err) {

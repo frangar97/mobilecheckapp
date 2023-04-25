@@ -21,6 +21,7 @@ type props = NativeStackScreenProps<AppNavigationType, "tarea_complete">;
 export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
     const clienteId = route.params.clienteId;
     const tareaId = route.params.tareaId;
+    const imagenRequerida = route.params.imagenRequerida;
     const [loading, setLoading] = useState(true);
     const [latitud, setLatitud] = useState(0);
     const [longitud, setLongitud] = useState(0);
@@ -33,6 +34,8 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
     const token = useUsuario(e => e.token);
     const obtenerVisitas = useVisita(e => e.obtenerVisitas);
     const obtenerTareas = useTarea(e => e.obtenerTareas);
+
+    console.log(imagenRequerida)
 
     const obtenerUbicacionActual = async () => {
         let permiso = await checkLocationPermission();
@@ -82,19 +85,29 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
 
     const crearVisita = async () => {
         try {
-            if (imageResponse === undefined || tipoVisitaId === undefined || comentario === "") {
-                Alert.alert("Visita", "Los campos de comentario, fotografia y tipo de visita son obligatorios.");
+            if (tipoVisitaId === undefined || comentario === "") {
+                Alert.alert("Visita", "Los campos de comentario y tipo de visita son obligatorios.");
                 return;
             }
 
-            const fileToUpload = {
-                uri: imageResponse!.assets![0].uri,
-                type: imageResponse!.assets![0].type,
-                name: imageResponse!.assets![0].fileName
+            if (imagenRequerida && imageResponse === undefined) {
+                Alert.alert("Visita", "La fotografia es obligatoria para la tarea.");
+                return;
             }
 
             let formData = new FormData();
-            formData.append("imagen", fileToUpload);
+
+            if (imagenRequerida) {
+                const fileToUpload = {
+                    uri: imageResponse!.assets![0].uri,
+                    type: imageResponse!.assets![0].type,
+                    name: imageResponse!.assets![0].fileName
+                }
+
+                formData.append("imagen", fileToUpload);
+            }
+
+            formData.append("imagenRequerida", imagenRequerida);
             formData.append("comentario", comentario);
             formData.append("fecha", format(new Date(), "yyyy-MM-dd h:m"));
             formData.append("latitud", latitud);
@@ -103,7 +116,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             formData.append("clienteId", clienteId);
             formData.append("tareaId", tareaId);
 
-            const request = await axios.post<Visita>(`${apiURL}/api/v1/movil/tarea/completar`, formData, { headers: { "Authorization": `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } });
+            await axios.post<Visita>(`${apiURL}/api/v1/movil/tarea/completar`, formData, { headers: { "Authorization": `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } });
             await obtenerVisitas(token);
             await obtenerTareas(token);
             navigation.pop(1);
@@ -165,25 +178,28 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                     rowTextStyle={styles.dropdown1RowTxtStyle}
                 />
             </View>
-            <View style={{ marginBottom: 10, marginTop: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>Fotografia</Text>
-                <View style={{ height: height * 0.20, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
-                    {(tempUri === "" || tempUri === undefined)
-                        ? (<TouchableOpacity onPress={() => tomarFotografia()} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                            <Icon name="camera-alt" size={35} color={colors.primary} />
-                            <Text style={{ color: colors.primary, fontWeight: "bold" }}>Tomar fotografia</Text>
-                        </TouchableOpacity>)
-                        : (
-                            <TouchableOpacity onPress={() => tomarFotografia()} >
-                                <ImageBackground source={{ uri: tempUri }} style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }} resizeMode="cover">
-                                    <Icon name="camera-alt" size={35} color={colors.white} />
-                                    <Text style={{ color: colors.white, fontWeight: "bold" }}>Editar fotografia</Text>
-                                </ImageBackground>
-                            </TouchableOpacity>
-                        )
-                    }
+
+            {imagenRequerida &&
+                <View style={{ marginBottom: 10, marginTop: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>Fotografia</Text>
+                    <View style={{ height: height * 0.20, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
+                        {(tempUri === "" || tempUri === undefined)
+                            ? (<TouchableOpacity onPress={() => tomarFotografia()} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                                <Icon name="camera-alt" size={35} color={colors.primary} />
+                                <Text style={{ color: colors.primary, fontWeight: "bold" }}>Tomar fotografia</Text>
+                            </TouchableOpacity>)
+                            : (
+                                <TouchableOpacity onPress={() => tomarFotografia()} >
+                                    <ImageBackground source={{ uri: tempUri }} style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }} resizeMode="cover">
+                                        <Icon name="camera-alt" size={35} color={colors.white} />
+                                        <Text style={{ color: colors.white, fontWeight: "bold" }}>Editar fotografia</Text>
+                                    </ImageBackground>
+                                </TouchableOpacity>
+                            )
+                        }
+                    </View>
                 </View>
-            </View>
+            }
 
             <View style={{ marginBottom: 10, marginTop: 10 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>Ubicación</Text>
