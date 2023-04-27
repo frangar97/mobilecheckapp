@@ -1,9 +1,11 @@
 export interface Tarea {
     id: number
-    descripcion: string
+    meta: string
     fecha: string
     completada: boolean
     clienteId: number
     cliente: string
     imagenRequerida: boolean
+    tipoVisita: string
+    requieremeta: boolean
 }

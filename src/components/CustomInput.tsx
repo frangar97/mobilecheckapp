@@ -7,9 +7,10 @@ type props = {
     setValue: (value: string) => void,
     placeholder: string,
     secureTextEntry?: boolean
+    editable?: boolean
 }
 
-export const CustomInput: FC<props> = ({ value, setValue, placeholder, secureTextEntry }) => {
+export const CustomInput: FC<props> = ({ value, setValue, placeholder, secureTextEntry, editable }) => {
     return (
         <View style={styles.container}>
             <TextInput
@@ -17,6 +18,7 @@ export const CustomInput: FC<props> = ({ value, setValue, placeholder, secureTex
                 onChangeText={setValue}
                 placeholder={placeholder}
                 secureTextEntry={secureTextEntry}
+                editable={editable}
             />
         </View>
     )

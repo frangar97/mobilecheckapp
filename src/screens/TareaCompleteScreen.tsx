@@ -22,15 +22,18 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
     const clienteId = route.params.clienteId;
     const tareaId = route.params.tareaId;
     const imagenRequerida = route.params.imagenRequerida;
+    const tiposVisita = route.params.tipoVisita;
+    const metaCumplir = route.params.meta;
+    const requiereMeta = route.params.requiereMeta;
     const [loading, setLoading] = useState(true);
     const [latitud, setLatitud] = useState(0);
     const [longitud, setLongitud] = useState(0);
     const [comentario, setComentario] = useState("");
+    const [meta, setMeta] = useState("");
     const [tempUri, setTempUri] = useState<string>();
     const [imageResponse, setImageResponse] = useState<ImagePickerResponse>();
     const [tipoVisitaId, setTipoVisitaId] = useState<number>();
     const { height } = useWindowDimensions();
-    const tiposVisita = useTipoVisita(e => e.tiposVisita);
     const token = useUsuario(e => e.token);
     const obtenerVisitas = useVisita(e => e.obtenerVisitas);
     const obtenerTareas = useTarea(e => e.obtenerTareas);
@@ -85,10 +88,10 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
 
     const crearVisita = async () => {
         try {
-            if (tipoVisitaId === undefined || comentario === "") {
-                Alert.alert("Visita", "Los campos de comentario y tipo de visita son obligatorios.");
-                return;
-            }
+             if ( requiereMeta  && meta === "") {
+                 Alert.alert("Visita", "La meta es obligatorios.");
+                 return;
+             }
 
             if (imagenRequerida && imageResponse === undefined) {
                 Alert.alert("Visita", "La fotografia es obligatoria para la tarea.");
@@ -112,7 +115,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             formData.append("fecha", format(new Date(), "yyyy-MM-dd h:m"));
             formData.append("latitud", latitud);
             formData.append("longitud", longitud);
-            formData.append("tipoVisitaId", tipoVisitaId);
+            formData.append("meta", meta);
             formData.append("clienteId", clienteId);
             formData.append("tareaId", tareaId);
 
@@ -122,6 +125,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             navigation.pop(1);
             Alert.alert("Tarea", "Tarea completada con exito.");
         } catch (err: any) {
+            console.log(err)
             Alert.alert("Tarea", "ocurrio un error y no se pudo registrar la tarea.");
         }
     }
@@ -149,34 +153,25 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
     return (
         <ScrollView style={{ padding: 15 }}>
             <View style={{ marginBottom: 10 }}>
+                <Text style={{ fontSize: 16, fontWeight: "bold", }}>Tipo Visita: </Text>
+                <Text style={{ fontSize: 16, marginBottom: 5 }}>{tiposVisita}</Text>
+            </View>
+
+            {requiereMeta &&
+                <><View style={{ marginBottom: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>Meta:</Text>
+                    <Text style={{ fontSize: 16, marginBottom: 5 }}>{metaCumplir}</Text>
+
+
+                </View><View style={{ marginBottom: 10 }}>
+                        <Text style={{ fontSize: 16, fontWeight: "bold" }}>Cantidad de Meta</Text>
+                        <CustomInput placeholder="Cantidad de Meta" value={meta} setValue={setMeta} />
+                    </View></>
+            }
+
+            <View style={{ marginBottom: 10 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold" }}>Comentario</Text>
                 <CustomInput placeholder="Comentario" value={comentario} setValue={setComentario} />
-            </View>
-            <View style={{ marginBottom: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>Tipo Visita</Text>
-                <SelectDropdown
-                    data={tiposVisita}
-                    onSelect={(selectedItem, index) => {
-                        console.log(selectedItem.id)
-                        setTipoVisitaId(selectedItem.id);
-                    }}
-                    defaultButtonText={' '}
-                    buttonTextAfterSelection={(selectedItem, index) => {
-                        return selectedItem.nombre;
-                    }}
-                    rowTextForSelection={(item, index) => {
-                        return item.nombre;
-                    }}
-                    buttonStyle={styles.dropdown1BtnStyle}
-                    buttonTextStyle={styles.dropdown1BtnTxtStyle}
-                    renderDropdownIcon={isOpened => {
-                        return <Icon name={isOpened ? 'arrow-drop-up' : 'arrow-drop-down'} color={'#444'} size={18} />;
-                    }}
-                    dropdownIconPosition={'right'}
-                    dropdownStyle={styles.dropdown1DropdownStyle}
-                    rowStyle={styles.dropdown1RowStyle}
-                    rowTextStyle={styles.dropdown1RowTxtStyle}
-                />
             </View>
 
             {imagenRequerida &&

@@ -13,6 +13,8 @@ type props = NativeStackScreenProps<AppNavigationType, "tarea_list">
 export const TareaListScreen: FC<props> = ({ navigation }) => {
     const tareas = useTarea(e => e.tareas);
 
+    console.log(tareas)
+
     useEffect(() => {
         navigation.setOptions({
             headerTitle: "Tareas del dia",
@@ -41,10 +43,10 @@ export const TareaListScreen: FC<props> = ({ navigation }) => {
                         return;
                     }
 
-                    navigation.navigate("tarea_complete", { clienteId: item.clienteId, tareaId: item.id, imagenRequerida: item.imagenRequerida })
+                    navigation.navigate("tarea_complete", { clienteId: item.clienteId, tareaId: item.id, imagenRequerida: item.imagenRequerida, tipoVisita: item.tipoVisita, meta: item.meta, requiereMeta: item.requieremeta })
                 }}>
                     <View>
-                        <Text style={{ color: "black", fontWeight: "bold" }}>{item.cliente}</Text>
+                        <Text style={{ color: "black", fontWeight: "bold" }}>{item.cliente} - {item.tipoVisita}</Text>
                         <Text style={{ color: "black" }}>{format(new Date(item.fecha), "hh:mm a")}</Text>
                     </View>
                     <Icon name={item.completada ? "check-circle-outline" : "alarm"} color={item.completada ? "green" : "orange"} size={30} />
