@@ -170,8 +170,8 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             }
 
             <View style={{ marginBottom: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>Comentario</Text>
-                <CustomInput placeholder="Comentario" value={comentario} setValue={setComentario} />
+                <Text style={{ fontSize: 16, fontWeight: "bold" }}>Comentario*</Text>
+                <CustomInput placeholder="Comentario no obligatorio" value={comentario} setValue={setComentario} />
             </View>
 
             {imagenRequerida &&
