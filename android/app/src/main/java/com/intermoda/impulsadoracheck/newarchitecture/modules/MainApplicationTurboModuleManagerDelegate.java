@@ -1,4 +1,4 @@
-package com.mobilecheckapp.newarchitecture.modules;
+package com.intermoda.impulsadoracheck.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
