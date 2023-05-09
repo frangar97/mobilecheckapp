@@ -1,4 +1,4 @@
-package com.mobilecheckapp;
+package com.intermoda.impulsadoracheck;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
