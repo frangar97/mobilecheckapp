@@ -140,7 +140,6 @@ export const VisitaCreateScreen: FC<props> = ({ navigation, route }) => {
                 <SelectDropdown
                     data={tiposVisita}
                     onSelect={(selectedItem, index) => {
-                        console.log(selectedItem.id)
                         setTipoVisitaId(selectedItem.id);
                     }}
                     defaultButtonText={' '}

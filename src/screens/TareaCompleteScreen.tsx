@@ -112,7 +112,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
 
             formData.append("imagenRequerida", imagenRequerida);
             formData.append("comentario", comentario);
-            formData.append("fecha", format(new Date(), "yyyy-MM-dd h:m"));
+            formData.append("fecha", format(new Date(), "yyyy-MM-dd H:m"));
             formData.append("latitud", latitud);
             formData.append("longitud", longitud);
             formData.append("meta", meta);

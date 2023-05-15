@@ -7,6 +7,8 @@ import { format } from "date-fns";
 import { AppNavigationType } from '../types/navigation_types';
 import { useTarea } from '../store';
 import { colors } from '../constants';
+import { ptBR } from 'date-fns/locale';
+
 
 type props = NativeStackScreenProps<AppNavigationType, "tarea_list">
 
@@ -47,7 +49,7 @@ export const TareaListScreen: FC<props> = ({ navigation }) => {
                 }}>
                     <View>
                         <Text style={{ color: "black", fontWeight: "bold" }}>{item.cliente} - {item.tipoVisita}</Text>
-                        <Text style={{ color: "black" }}>{format(new Date(item.fecha), "hh:mm a")}</Text>
+                        <Text style={{ color: "black" }}>{format(new Date(item.fecha.replace('Z','')), "hh-mm a", {locale: ptBR})}</Text>
                     </View>
                     <Icon name={item.completada ? "check-circle-outline" : "alarm"} color={item.completada ? "green" : "orange"} size={30} />
                 </TouchableOpacity>)}
