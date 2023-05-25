@@ -25,11 +25,17 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
     const tiposVisita = route.params.tipoVisita;
     const metaCumplir = route.params.meta;
     const requiereMeta = route.params.requiereMeta;
+    const metaLineaCumplir = route.params.metaLinea;
+    const requiereMetaLinea = route.params.requiereMetaLinea;
+    const metaSubLineaCumplir = route.params.metaSublinea;
+    const requiereMetaSubLinea = route.params.requiereMetaSubLinea;
     const [loading, setLoading] = useState(true);
     const [latitud, setLatitud] = useState(0);
     const [longitud, setLongitud] = useState(0);
     const [comentario, setComentario] = useState("");
     const [meta, setMeta] = useState("");
+    const [metaLinea, setMetaLinea] = useState("");
+    const [metaSubLinea, setMetaSubLinea] = useState("");
     const [tempUri, setTempUri] = useState<string>();
     const [imageResponse, setImageResponse] = useState<ImagePickerResponse>();
     const [tipoVisitaId, setTipoVisitaId] = useState<number>();
@@ -118,6 +124,8 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             formData.append("meta", meta);
             formData.append("clienteId", clienteId);
             formData.append("tareaId", tareaId);
+            formData.append("metaLinea", metaLinea);
+            formData.append("metaSubLinea", metaSubLinea);
 
             await axios.post<Visita>(`${apiURL}/api/v1/movil/tarea/completar`, formData, { headers: { "Authorization": `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } });
             await obtenerVisitas(token);
@@ -166,6 +174,29 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                 </View><View style={{ marginBottom: 10 }}>
                         <Text style={{ fontSize: 16, fontWeight: "bold" }}>Cantidad de Meta</Text>
                         <CustomInput placeholder="Cantidad de Meta" value={meta} setValue={setMeta} />
+                    </View></>
+            }
+
+             {requiereMetaLinea &&
+                <><View style={{ marginBottom: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>Meta Linea:</Text>
+                    <Text style={{ fontSize: 16, marginBottom: 5 }}>{metaLineaCumplir}</Text>
+
+
+                </View><View style={{ marginBottom: 10 }}>
+                        <Text style={{ fontSize: 16, fontWeight: "bold" }}>Cantidad de Meta Linea</Text>
+                        <CustomInput placeholder="Cantidad de Meta" value={metaLinea} setValue={setMetaLinea} />
+                    </View></>
+            }
+             {requiereMetaSubLinea &&
+                <><View style={{ marginBottom: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>Meta SubLinea:</Text>
+                    <Text style={{ fontSize: 16, marginBottom: 5 }}>{metaSubLineaCumplir}</Text>
+
+
+                </View><View style={{ marginBottom: 10 }}>
+                        <Text style={{ fontSize: 16, fontWeight: "bold" }}>Cantidad de Meta SubLinea</Text>
+                        <CustomInput placeholder="Cantidad de Meta" value={metaSubLinea} setValue={setMetaSubLinea} />
                     </View></>
             }
 

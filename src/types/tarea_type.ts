@@ -8,4 +8,8 @@ export interface Tarea {
     imagenRequerida: boolean
     tipoVisita: string
     requieremeta: boolean
+    metaLinea: string
+    metaSublinea: string
+    requiereMetaLinea: boolean
+    requiereMetaSubLinea: boolean
 }

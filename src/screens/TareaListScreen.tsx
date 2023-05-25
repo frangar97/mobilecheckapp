@@ -44,8 +44,7 @@ export const TareaListScreen: FC<props> = ({ navigation }) => {
                     if (item.completada) {
                         return;
                     }
-
-                    navigation.navigate("tarea_complete", { clienteId: item.clienteId, tareaId: item.id, imagenRequerida: item.imagenRequerida, tipoVisita: item.tipoVisita, meta: item.meta, requiereMeta: item.requieremeta })
+                    navigation.navigate("tarea_complete", { clienteId: item.clienteId, tareaId: item.id, imagenRequerida: item.imagenRequerida, tipoVisita: item.tipoVisita, meta: item.meta, requiereMeta: item.requieremeta, metaLinea:item.metaLinea, metaSublinea:item.metaSublinea, requiereMetaLinea: item.requiereMetaLinea, requiereMetaSubLinea: item.requiereMetaSubLinea })
                 }}>
                     <View>
                         <Text style={{ color: "black", fontWeight: "bold" }}>{item.cliente} - {item.tipoVisita}</Text>
