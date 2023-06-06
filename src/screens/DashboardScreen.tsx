@@ -13,6 +13,8 @@ export const DashboardScreen = () => {
     const completadas = tareas.filter(x => x.completada).length;
     const pendientes = tareas.filter(x => !x.completada).length;
 
+    const clientesAsignados = [...new Set(clientes.map(item => item.id))];
+  
     return (
         <ScrollView style={{ padding: 15 }}>
             <View>
@@ -22,7 +24,7 @@ export const DashboardScreen = () => {
             <View style={style.cardContainer}>
                 <View>
                     <Text style={{ color: "black", fontWeight: "bold" }}>Clientes asignados</Text>
-                    <Text style={{ color: "black", fontSize: 25 }}>{clientes.length}</Text>
+                    <Text style={{ color: "black", fontSize: 25 }}>{clientesAsignados.length}</Text>
                 </View>
                 <Icon name='person-outline' color={colors.primary} size={35} />
             </View>
