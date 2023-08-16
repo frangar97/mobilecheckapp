@@ -19,6 +19,7 @@ export const CustomInput: FC<props> = ({ value, setValue, placeholder, secureTex
                 placeholder={placeholder}
                 secureTextEntry={secureTextEntry}
                 editable={editable}
+                style={{color: colors.black}}
             />
         </View>
     )

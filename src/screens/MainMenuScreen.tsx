@@ -1,11 +1,12 @@
-import { useEffect } from "react";
-import { View, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
+import React, { useEffect } from "react";
+import { View, StyleSheet, Image, TouchableOpacity, Alert, Text } from "react-native";
 import { openSettings } from "react-native-permissions";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { MenuItem } from "../components";
 import { useUsuario, useCliente, useTipoVisita, useVisita, useTarea } from '../store';
 import { colors, icons, images } from "../constants";
 import { askLocationPermission, checkLocationPermission } from "../utils/location";
+import { OfflineScreen } from "../utils/connectionStatus";
 
 export const MainMenuScreen = () => {
     const cerrarSesion = useUsuario(e => e.cerrarSesion);
@@ -14,6 +15,7 @@ export const MainMenuScreen = () => {
     const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
     const obtenerVisitas = useVisita(e => e.obtenerVisitas);
     const obtenerTareas = useTarea(e => e.obtenerTareas);
+    const Offline = OfflineScreen()
 
     const verificarPermisos = async () => {
         let permiso = await checkLocationPermission();
@@ -53,6 +55,10 @@ export const MainMenuScreen = () => {
             <View style={{ width: "95%", marginTop: 10, justifyContent: "space-between", flexDirection: "row", alignSelf: "center" }}>
                 <TouchableOpacity onPress={verificarCerrarSesion}>
                     <Icon name='logout' color={colors.primary} size={35} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={verificarCerrarSesion}>
+                     {Offline ? <Text style={{ alignItems: "center", }}>Sin Acceso a internet</Text>
+                        : <Text style={{ alignItems: "center", }}>Conectado</Text>} 
                 </TouchableOpacity>
                 <TouchableOpacity onPress={verificarActualizacionDatos}>
                     <Icon name='autorenew' color={colors.primary} size={35} />

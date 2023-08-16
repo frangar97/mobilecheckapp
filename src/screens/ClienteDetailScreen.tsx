@@ -26,19 +26,19 @@ export const ClienteDetailScreen: FC<props> = ({ route, navigation }) => {
             </View>
             <View style={{ padding: 15 }}>
                 <View style={{ marginBottom: 10, marginTop: 10 }}>
-                    <Text style={{ fontSize: 18, fontWeight: "bold" }}>Dirección</Text>
-                    <Text style={{ fontSize: 14, fontWeight: "bold" }}>{cliente.direccion == "" ? "No disponible" : cliente.direccion}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: "bold", color: colors.black }}>Dirección</Text>
+                    <Text style={{ fontSize: 14, fontWeight: "bold", color: colors.black }}>{cliente.direccion == "" ? "No disponible" : cliente.direccion}</Text>
                 </View>
                 <View style={{ marginBottom: 10, marginTop: 10 }}>
-                    <Text style={{ fontSize: 18, fontWeight: "bold" }}>Telefono</Text>
-                    <Text style={{ fontSize: 14, fontWeight: "bold" }}>{cliente.telefono == "" ? "No disponible" : cliente.telefono}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: "bold", color: colors.black }}>Telefono</Text>
+                    <Text style={{ fontSize: 14, fontWeight: "bold", color: colors.black }}>{cliente.telefono == "" ? "No disponible" : cliente.telefono}</Text>
                 </View>
                 <View style={{ marginBottom: 10, marginTop: 10 }}>
-                    <Text style={{ fontSize: 18, fontWeight: "bold" }}>Email</Text>
-                    <Text style={{ fontSize: 14, fontWeight: "bold" }}>{cliente.email == "" ? "No disponible" : cliente.email}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: "bold", color: colors.black }}>Email</Text>
+                    <Text style={{ fontSize: 14, fontWeight: "bold", color: colors.black }}>{cliente.email == "" ? "No disponible" : cliente.email}</Text>
                 </View>
                 <View style={{ marginBottom: 10, marginTop: 10 }}>
-                    <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Ubicación</Text>
+                    <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10, color: colors.black }}>Ubicación</Text>
                     <View style={{ height: height*0.30, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
                         <MapView
                             style={{ width: "100%", height: "100%", borderRadius: 3 }}

@@ -46,7 +46,7 @@ export const ClienteListScreen: FC<props> = ({ navigation }) => {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                 <Icon name='mood-bad' color={colors.primary} size={35} />
-                <Text>No tiene clientes asignados.</Text>
+                <Text style={{color: colors.black}} >No tiene clientes asignados.</Text>
             </View>
         )
     }
@@ -57,7 +57,7 @@ export const ClienteListScreen: FC<props> = ({ navigation }) => {
             keyExtractor={e => e.id.toString()}
             renderItem={({ item }) => (
                 <TouchableOpacity onPress={() => { navigation.navigate("cliente_detail", { cliente: item }) }} style={{ width: width * 0.9, alignSelf: "center", borderWidth: 0.5, backgroundColor: colors.white, padding: 15, marginTop: 8, borderRadius: 3, borderColor: "#cccc" }}>
-                    <Text>{item.nombre}</Text>
+                    <Text style={{color: colors.black}}>{item.nombre}</Text>
                 </TouchableOpacity>)}
             estimatedItemSize={clientes.length}
         />
