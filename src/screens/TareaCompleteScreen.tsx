@@ -176,7 +176,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             formData.append("metaLinea", metaLinea);
             formData.append("metaSubLinea", metaSubLinea);
 
-            await axios.post<Visita>(`${apiURL}/api/v1/movil/tarea/completar`, formData, { headers: { "Authorization": `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } });
+            await axios.post<Visita>(`${apiURL}/api/v1/movil/tarea/completar`, formData, { headers: { "Authorization": `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }, timeout: 60000, });
             await obtenerVisitas(token);
             await obtenerTareas(token);
             setGuardando(false)
@@ -184,18 +184,39 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             Alert.alert("Tarea", "Tarea completada con exito.");
         } catch (err: any) {
             setGuardando(false)
-            Alert.alert("Tarea", "ocurrio un error y no se pudo registrar la tarea, verifique su cobertura de internet.",
-                [
-                    { text: 'Ok', style: 'cancel' },
-                    { text: 'Completar desde el navegador', onPress: () => handleOpenBrowser() },
-                ],
-                { cancelable: false }
-            );
+            if (axios.isCancel(err)) {
+                console.log('Request cancelled:', err.message);
+                Alert.alert("Tarea", "Procedo de completado de tarea cancelado.",
+                    [
+                        { text: 'Ok', style: 'cancel' },
+                    ],
+                    { cancelable: false }
+                );
+            } else if (err.code === 'ECONNABORTED') {
+                console.log('Request timed out:', err.message);
+                Alert.alert("Tarea", "Verifique su cobertura de internet, tiempo agotado para completar la tarea.",
+                    [
+                        { text: 'Ok', style: 'cancel' },
+                        { text: 'Completar desde el navegador', onPress: () => handleOpenBrowser() },
+                    ],
+                    { cancelable: false }
+                );
+            } else {
+                console.log('Error:', err.message);
+                Alert.alert("Tarea", "ocurrio un error y no se pudo registrar la tarea, verifique su cobertura de internet.",
+                    [
+                        { text: 'Ok', style: 'cancel' },
+                        { text: 'Completar desde el navegador', onPress: () => handleOpenBrowser() },
+                    ],
+                    { cancelable: false }
+                );
+            }
+
         }
     }
 
     const handleOpenBrowser = () => {
-        const url = 'https://impulsadoras.intermoda.hn/';
+        const url = 'http://18.219.36.66/';
 
         Linking.openURL(url)
             .catch((err) => console.error('Error al abrir la URL:', err));
