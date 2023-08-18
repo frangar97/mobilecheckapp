@@ -340,9 +340,10 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                 {longitud == 0 &&
                     <>
                         <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>No se logro obtener la ubicación, verifique que el GPS este activo o:</Text>
-                        <CustomButton text="Completar desde el navegador" onPress={handleOpenBrowser} />
                     </>
                 }
+
+                <CustomButton text="Completar desde el navegador" onPress={handleOpenBrowser} />
 
 
             </View>
