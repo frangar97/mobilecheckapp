@@ -165,7 +165,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                 com = "Sin Ubicacion Asesor -" + com;
             }
 
-            formData.append("imagenRequerida", imagenRequerida);
+            formData.append("imagenRequerida", requiereimagen);
             formData.append("comentario", com);
             formData.append("fecha", format(new Date(), "yyyy-MM-dd H:m"));
             formData.append("latitud", lat);
