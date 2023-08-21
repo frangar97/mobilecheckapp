@@ -160,8 +160,8 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             let com = comentario;
 
             if (longitud === 0 || latitud === 0) {
-                long = 20.215832973903805;
-                lat = -55.61826399407612;
+                long = -55.61826399407612;
+                lat = 20.215832973903805;
                 com = "Sin Ubicacion Asesor -" + com;
             }
 
