@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useState } from "react";
-import { Alert, Image, StyleSheet, useWindowDimensions, View } from "react-native"
+import React, { useState } from "react";
+import { Alert, Image, StyleSheet, Text, useWindowDimensions, View } from "react-native"
 import { CustomButton, CustomInput } from "../components";
 import { apiURL, images } from "../constants";
 import { useVisita, useUsuario, useCliente, useTipoVisita, useTarea } from "../store";
+import { OfflineScreen } from "../utils/connectionStatus";
 
 export const LoginScreen = () => {
     const guardarUsuario = useUsuario(e => e.guardarUsuario);
@@ -14,6 +15,7 @@ export const LoginScreen = () => {
     const { height } = useWindowDimensions();
     const [usuario, setUsuario] = useState("");
     const [password, setPassword] = useState("");
+    const Offline = OfflineScreen()
 
     const iniciarSesion = async () => {
         try {
@@ -35,8 +37,9 @@ export const LoginScreen = () => {
     }
 
     return (
-        <View style={styles.root}>
+        <View style={styles.root}>            
             <Image source={images.logo} style={[styles.logo, { height: height * 0.3 }]} resizeMode="contain" />
+            {Offline ? <Text>Sin Acceso a internet</Text> : <Text>Conectado</Text>}
             <CustomInput placeholder="usuario" value={usuario} setValue={setUsuario} />
             <CustomInput placeholder="password" value={password} setValue={setPassword} secureTextEntry />
             <CustomButton text="Iniciar Sesión" onPress={iniciarSesion} />

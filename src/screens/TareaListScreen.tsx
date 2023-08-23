@@ -15,8 +15,6 @@ type props = NativeStackScreenProps<AppNavigationType, "tarea_list">
 export const TareaListScreen: FC<props> = ({ navigation }) => {
     const tareas = useTarea(e => e.tareas);
 
-    console.log(tareas)
-
     useEffect(() => {
         navigation.setOptions({
             headerTitle: "Tareas del dia",
