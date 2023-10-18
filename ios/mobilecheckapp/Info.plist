@@ -35,19 +35,21 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Brindar permiso para acceder a la camara</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Permiso : A camara,tareas necesrias</string>
+	<string>Brindar permiso para acceder a la camara</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Permiso: Acceder a mi ubicaciòn</string>
+	<string>Brindar permniso para acceder a mi ubicaciòn</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Permiso: Acceder a mi ubicaciòn</string>
+	<string>Brindar permniso para acceder a mi ubicaciòn</string>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
 	<dict>
 		<key>YOUR-PURPOSE-KEY</key>
-		<string>Permiso: Acceder a mi ubicaciòn</string>
+		<string>Brindar permniso para acceder a mi ubicaciòn</string>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Permiso: Acceder a mi ubicaciòn</string>
+	<string>Brindar permniso para acceder a mi ubicaciòn</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
