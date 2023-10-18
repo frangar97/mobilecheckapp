@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { Text, View, ScrollView, useWindowDimensions } from 'react-native';
-import MapView, { Marker } from "react-native-maps";
+// import MapView, { Marker } from "react-native-maps";
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AppNavigationType } from '../types/navigation_types';
 import { colors } from '../constants';
@@ -37,7 +37,7 @@ export const ClienteDetailScreen: FC<props> = ({ route, navigation }) => {
                     <Text style={{ fontSize: 18, fontWeight: "bold", color: colors.black }}>Email</Text>
                     <Text style={{ fontSize: 14, fontWeight: "bold", color: colors.black }}>{cliente.email == "" ? "No disponible" : cliente.email}</Text>
                 </View>
-                <View style={{ marginBottom: 10, marginTop: 10 }}>
+                {/* <View style={{ marginBottom: 10, marginTop: 10 }}>
                     <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10, color: colors.black }}>Ubicación</Text>
                     <View style={{ height: height*0.30, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
                         <MapView
@@ -46,7 +46,7 @@ export const ClienteDetailScreen: FC<props> = ({ route, navigation }) => {
                             <Marker coordinate={{ latitude: cliente.latitud, longitude: cliente.longitud }} />
                         </MapView>
                     </View>
-                </View>
+                </View> */}
             </View>
         </ScrollView>
     )

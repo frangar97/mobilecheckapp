@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Alert, Text, View, ActivityIndicator, useWindowDimensions, ScrollView, TouchableOpacity, ImageBackground, StyleSheet } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+// import MapView, { Marker } from "react-native-maps";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import SelectDropdown from 'react-native-select-dropdown'
@@ -320,7 +320,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                 </View>
             }
 
-            <View style={{ marginBottom: 10, marginTop: 10 }}>
+            {/* <View style={{ marginBottom: 10, marginTop: 10 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Ubicación</Text>
                 <View style={{ height: height * 0.25, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
                     <MapView
@@ -329,7 +329,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                         <Marker coordinate={{ latitude: latitud, longitude: longitud }} />
                     </MapView>
                 </View>
-            </View>
+            </View> */}
             <LoadingModal visible={isLoading} />
             <View style={{ marginBottom: 20 }}>
                 <Conexion />

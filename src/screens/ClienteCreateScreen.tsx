@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { Alert, Text, View, useWindowDimensions, ActivityIndicator, ScrollView } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import MapView, { Marker } from "react-native-maps";
+// import MapView, { Marker } from "react-native-maps";
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import { openSettings } from 'react-native-permissions';
@@ -111,7 +111,7 @@ export const ClienteCreateScreen: FC<props> = ({ navigation }) => {
                 <Text style={{ fontSize: 16, fontWeight: "bold" }}>Dirección</Text>
                 <CustomInput placeholder="Dirección" value={direccion} setValue={setDireccion} />
             </View>
-            <View style={{ marginBottom: 10, marginTop: 10 }}>
+            {/* <View style={{ marginBottom: 10, marginTop: 10 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 10 }}>Ubicación</Text>
                 <View style={{ height: height * 0.25, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
                     <MapView
@@ -120,7 +120,7 @@ export const ClienteCreateScreen: FC<props> = ({ navigation }) => {
                         <Marker coordinate={{ latitude: latitud, longitude: longitud }} />
                     </MapView>
                 </View>
-            </View>
+            </View> */}
             <View style={{ marginBottom: 10 }}>
                 <CustomButton text="Guardar Cliente" onPress={crearCliente} />
             </View>
