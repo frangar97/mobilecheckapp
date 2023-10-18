@@ -66,7 +66,8 @@ export const MainMenuScreen = () => {
             </View>
             <View style={styles.headerContainer}>
                 <Image source={images.logo} style={styles.welcomeImage} />
-            </View>
+                {/* <Text style={{ alignItems: "center", }}>Actualizar Aplicación</Text> */}
+            </View>       
             <View style={styles.menuContainer}>
                 <View style={[styles.rowMenu, { marginBottom: 80 }]}>
                     <MenuItem helperText="Dashboard" icon={icons.dashboard} route="dashboard" />

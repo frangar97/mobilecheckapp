@@ -83,9 +83,12 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             },
             (err) => {
                 if (err.PERMISSION_DENIED === 1) {
-                    Alert.alert("Ubicación", "Ocurrio un error .",
-                        [{ text: "Ok", onPress: () => { navigation.goBack(); } }]);
+                    Alert.alert("Ubicación", "Error permiso denegado GPS.",
+                        [{ text: "Ok", style: 'cancel' }]);
                 }
+
+                setLatitud(0);
+                setLongitud(0);
             },
             { enableHighAccuracy: true }
         )
@@ -320,22 +323,26 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                 </View>
             }
 
-            <View style={{ marginBottom: 10, marginTop: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Ubicación</Text>
-                <View style={{ height: height * 0.25, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
-                    <MapView
-                        style={{ width: "100%", height: "100%", borderRadius: 3 }}
-                        initialRegion={{ latitude: latitud, longitude: longitud, latitudeDelta: 0, longitudeDelta: 0 }}>
-                        <Marker coordinate={{ latitude: latitud, longitude: longitud }} />
-                    </MapView>
+            {latitud > 0  &&
+
+                <View style={{ marginBottom: 10, marginTop: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Ubicación</Text>
+                    <View style={{ height: height * 0.25, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
+                        <MapView
+                            style={{ width: "100%", height: "100%", borderRadius: 3 }}
+                            initialRegion={{ latitude: latitud, longitude: longitud, latitudeDelta: 0, longitudeDelta: 0 }}>
+                            <Marker coordinate={{ latitude: latitud, longitude: longitud }} />
+                        </MapView>
+                    </View>
                 </View>
-            </View>
+
+            }
+
+
             <LoadingModal visible={isLoading} />
             <View style={{ marginBottom: 20 }}>
                 <Conexion />
-                {/* {longitud != 0 && */}
                 <CustomButton text="Completar Tarea" onPress={crearVisita} />
-                {/* } */}
 
                 {longitud == 0 &&
                     <>
