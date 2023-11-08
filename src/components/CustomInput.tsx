@@ -19,7 +19,7 @@ export const CustomInput: FC<props> = ({ value, setValue, placeholder, secureTex
                 placeholder={placeholder}
                 secureTextEntry={secureTextEntry}
                 editable={editable}
-                style={ {height: Math.max(40, 1), color: colors.black}}
+                style={styles.input}
  />
         </View>
     )
@@ -32,7 +32,13 @@ const styles = StyleSheet.create({
         borderColor: "#ccc",
         borderWidth: 1,
         borderRadius: 5,
+        marginBottom: 10,
         paddingHorizontal: 10,
-        marginVertical: 5
-    }
+        marginVertical: 5,
+    },
+    input: {
+        flex: 1,
+        //height: Math.max(40, 1),
+        color: colors.black
+      },
 })
