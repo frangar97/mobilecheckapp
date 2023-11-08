@@ -20,7 +20,7 @@ export const CustomInput: FC<props> = ({ value, setValue, placeholder, secureTex
                 secureTextEntry={secureTextEntry}
                 editable={editable}
                 style={styles.input}
- />
+            />
         </View>
     )
 }
@@ -29,16 +29,19 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.white,
         width: "100%",
-        borderColor: "#ccc",
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 5,
         marginBottom: 10,
         paddingHorizontal: 10,
         marginVertical: 5,
+        flex: 1,
+        justifyContent: "space-around",
+        padding: 15,
     },
     input: {
-        flex: 1,
-        //height: Math.max(40, 1),
-        color: colors.black
-      },
+        flex: 1
+    },
 })

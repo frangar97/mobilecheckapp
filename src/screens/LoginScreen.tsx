@@ -7,7 +7,7 @@ import { useVisita, useUsuario, useCliente, useTipoVisita, useTarea } from "../s
 import { OfflineScreen } from "../utils/connectionStatus";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { KeyboardAwareScrollView, KeyboardAwareScrollViewProps } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView, KeyboardAwareScrollViewProps } from 'react-native-keyboard-aware-scroll-view';
 
 export const LoginScreen = () => {
     const guardarUsuario = useUsuario(e => e.guardarUsuario);
@@ -62,7 +62,7 @@ export const LoginScreen = () => {
                     style={styles.input}
                 />
                     <Pressable style={styles.iconContainer} onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
-                    <Icon name={isPasswordVisible ? 'visibility' : 'visibility-off'} size={25} />
+                    <Icon name={isPasswordVisible ? 'visibility-off' : 'visibility'} size={25} />
                     </Pressable>
 
             </View>
@@ -101,9 +101,5 @@ const styles = StyleSheet.create({
       },
       iconContainer: {
         padding: 10,
-      },
-      scrollContainer : {
-        flex:1,
-        marginBottom:20
       }
 });

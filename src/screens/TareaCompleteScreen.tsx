@@ -18,6 +18,7 @@ import { useVisita, useTipoVisita, useUsuario, useTarea } from "../store";
 import { LoadingModal } from "../utils/Loading";
 import { Linking } from 'react-native';
 import { Conexion, OfflineScreen } from "../utils/connectionStatus";
+import { KeyboardAwareScrollView, KeyboardAwareScrollViewProps } from 'react-native-keyboard-aware-scroll-view';
 
 type props = NativeStackScreenProps<AppNavigationType, "tarea_complete">;
 
@@ -254,8 +255,14 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
         )
     }
 
+    const customProps: KeyboardAwareScrollViewProps = {
+        extraHeight: 50,
+        // ... other props
+      };
+
     return (
-        <ScrollView style={{ padding: 15 }}>
+        <KeyboardAwareScrollView  {...customProps} >
+        <View style={{ padding: 15 }}>
             <View style={{ marginBottom: 10 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Tipo Visita: </Text>
                 <Text style={{ fontSize: 16, marginBottom: 5, color: colors.black }}>{tiposVisita}</Text>
@@ -348,7 +355,8 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
 
 
             </View>
-        </ScrollView>
+        </View>
+        </KeyboardAwareScrollView>
     )
 }
 
