@@ -10,5 +10,5 @@ export type AppNavigationType = {
     visita_cliente_list: undefined,
     visita_create: { clienteId: number },
     tarea_list: undefined,
-    tarea_complete: { clienteId: number, tareaId: number, imagenRequerida: boolean, tipoVisita: string, meta: string, requiereMeta: boolean, metaLinea: string, metaSublinea: string, requiereMetaLinea: boolean, requiereMetaSubLinea: boolean }
+    tarea_complete: { clienteId: number, tareaId: number, imagenRequerida: boolean, tipoVisita: string, meta: string, requiereMeta: boolean, metaLinea: string, metaSublinea: string, requiereMetaLinea: boolean, requiereMetaSubLinea: boolean, latitudCliente: number, longitudCliente: number }
 }
