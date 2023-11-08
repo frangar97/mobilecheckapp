@@ -58,7 +58,7 @@ export const LoginScreen = () => {
                     placeholder="Password"
                     value={password}
                     onChangeText={setPassword}
-                    secureTextEntry={!isPasswordVisible}
+                    secureTextEntry={isPasswordVisible}
                     style={styles.input}
                 />
                     <Pressable style={styles.iconContainer} onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
