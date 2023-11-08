@@ -33,20 +33,20 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Brindar permiso para acceder a la camara</string>
+	<string>Brindar permiso para acceder a la camara, para las tareas que lo requieren</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Brindar permiso para acceder a la camara</string>
+	<string>Brindar permiso para acceder a la camara, para las tareas que lo requieren</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Brindar permniso para acceder a mi ubicaciòn</string>
+	<string>Brindar permiso para acceder a su ubicación, para las tareas que lo requieren</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Brindar permniso para acceder a mi ubicaciòn</string>
+	<string>Brindar permiso para acceder a mi ubicación, para las tareas que lo requieren</string>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
 	<dict>
 		<key>YOUR-PURPOSE-KEY</key>
-		<string>Brindar permniso para acceder a mi ubicaciòn</string>
+		<string>Brindar permiso para acceder a mi ubicación, para las tareas que lo requieren</string>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Brindar permniso para acceder a mi ubicaciòn</string>
+	<string>Brindar permiso para acceder a mi ubicación, para las tareas que lo requieren</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
