@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Alert, Image, Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native"
 import { CustomButton, CustomInput } from "../components";
 import { apiURL, colors, images } from "../constants";
-import { useVisita, useUsuario, useCliente, useTipoVisita, useTarea } from "../store";
+import { useVisita, useUsuario, useCliente, useTipoVisita, useTarea, useAccesosWeb } from "../store";
 import { OfflineScreen } from "../utils/connectionStatus";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -15,6 +15,7 @@ export const LoginScreen = () => {
     const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
     const obtenerVisitas = useVisita(e => e.obtenerVisitas);
     const obtenerTareas = useTarea(e => e.obtenerTareas);
+    const obtenerAccesosWeb = useAccesosWeb(e => e.obtenerAccesos);
     const { height } = useWindowDimensions();
     const [usuario, setUsuario] = useState("");
     const [password, setPassword] = useState("");
@@ -34,6 +35,7 @@ export const LoginScreen = () => {
             obtenerClientes(data.token);
             obtenerVisitas(data.token);
             obtenerTareas(data.token);
+            obtenerAccesosWeb(data.token);
             guardarUsuario(data.usuario, data.token);
         } catch (err) {
             Alert.alert("Inicio Sesión", "Ocurrio un error y no se pudo iniciar sesión.");

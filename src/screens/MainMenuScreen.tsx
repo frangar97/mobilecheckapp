@@ -7,6 +7,7 @@ import { useUsuario, useCliente, useTipoVisita, useVisita, useTarea } from '../s
 import { colors, icons, images } from "../constants";
 import { askLocationPermission, checkLocationPermission } from "../utils/location";
 import { OfflineScreen } from "../utils/connectionStatus";
+import { useAccesosWeb } from "../store/accesos";
 
 export const MainMenuScreen = () => {
     const cerrarSesion = useUsuario(e => e.cerrarSesion);
@@ -15,6 +16,7 @@ export const MainMenuScreen = () => {
     const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
     const obtenerVisitas = useVisita(e => e.obtenerVisitas);
     const obtenerTareas = useTarea(e => e.obtenerTareas);
+    const obtenerAccesosWeb = useAccesosWeb(e => e.obtenerAccesos)
     const Offline = OfflineScreen()
 
     const verificarPermisos = async () => {
@@ -42,6 +44,7 @@ export const MainMenuScreen = () => {
                     obtenerTiposVisita(token);
                     obtenerVisitas(token);
                     obtenerTareas(token);
+                    obtenerAccesosWeb(token);
                 }
             }, { text: "No" }])
     }

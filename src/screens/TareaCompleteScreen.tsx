@@ -14,11 +14,12 @@ import { CustomButton, CustomInput } from "../components";
 import axios from "axios";
 import { format } from "date-fns";
 import { Visita } from "../types/visita_types";
-import { useVisita, useTipoVisita, useUsuario, useTarea } from "../store";
+import { useVisita, useTipoVisita, useUsuario, useTarea, useAccesosWeb } from "../store";
 import { LoadingModal } from "../utils/Loading";
 import { Linking } from 'react-native';
 import { Conexion, OfflineScreen } from "../utils/connectionStatus";
 import { KeyboardAwareScrollView, KeyboardAwareScrollViewProps } from 'react-native-keyboard-aware-scroll-view';
+import { verificarPantallas } from "../utils/generales";
 
 type props = NativeStackScreenProps<AppNavigationType, "tarea_complete">;
 
@@ -49,7 +50,9 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
     const obtenerVisitas = useVisita(e => e.obtenerVisitas);
     const obtenerTareas = useTarea(e => e.obtenerTareas);
     const [isLoading, setIsLoading] = useState(false);
-    const offline = OfflineScreen()
+    const offline = OfflineScreen();
+    const [marcarWeb, setMarcarWeb] = useState(false);
+    const accesosWeb = useAccesosWeb(e => e.accesos);
 
     const simulateAsyncTask = () => {
         setIsLoading(true);
@@ -228,6 +231,8 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
 
     useEffect(() => {
         obtenerUbicacionActual();
+        const webMarcaje = accesosWeb.some(e => e.pantalla = "Completar Tareas Desde la Web");
+        setMarcarWeb(webMarcaje);
     }, []);
 
     useEffect(() => {
@@ -258,79 +263,79 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
     const customProps: KeyboardAwareScrollViewProps = {
         extraHeight: 50,
         // ... other props
-      };
+    };
 
     return (
         <KeyboardAwareScrollView  {...customProps} >
-        <View style={{ padding: 15 }}>
-            <View style={{ marginBottom: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Tipo Visita: </Text>
-                <Text style={{ fontSize: 16, marginBottom: 5, color: colors.black }}>{tiposVisita}</Text>
-            </View>
-
-            {requiereMeta &&
-                <><View style={{ marginBottom: 10 }}>
-                    <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Meta:</Text>
-                    <Text style={{ fontSize: 16, marginBottom: 5, color: colors.black }}>{metaCumplir}</Text>
-
-
-                </View><View style={{ marginBottom: 10 }}>
-                        <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Cantidad de Meta</Text>
-                        <CustomInput placeholder="Cantidad de Meta" value={meta} setValue={setMeta} />
-                    </View></>
-            }
-
-            {requiereMetaLinea &&
-                <><View style={{ marginBottom: 10 }}>
-                    <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Meta Linea:</Text>
-                    <Text style={{ fontSize: 16, marginBottom: 5, color: colors.black }}>{metaLineaCumplir}</Text>
-
-
-                </View><View style={{ marginBottom: 10 }}>
-                        <Text style={{ fontSize: 16, fontWeight: "bold" }}>Cantidad de Meta Linea</Text>
-                        <CustomInput placeholder="Cantidad de Meta" value={metaLinea} setValue={setMetaLinea} />
-                    </View></>
-            }
-            {requiereMetaSubLinea &&
-                <><View style={{ marginBottom: 10 }}>
-                    <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Meta SubLinea:</Text>
-                    <Text style={{ fontSize: 16, marginBottom: 5, color: colors.black }}>{metaSubLineaCumplir}</Text>
-
-
-                </View><View style={{ marginBottom: 10 }}>
-                        <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Cantidad de Meta SubLinea</Text>
-                        <CustomInput placeholder="Cantidad de Meta" value={metaSubLinea} setValue={setMetaSubLinea} />
-                    </View></>
-            }
-
-            <View style={{ marginBottom: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Comentario(*)</Text>
-                <CustomInput placeholder="Comentario" value={comentario} setValue={setComentario} />
-            </View>
-
-            {(imagenRequerida || longitud === 0) &&
-                <View style={{ marginBottom: 10, marginTop: 10 }}>
-                    <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Fotografia</Text>
-                    <View style={{ height: height * 0.20, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
-                        {(tempUri === "" || tempUri === undefined)
-                            ? (<TouchableOpacity onPress={() => tomarFotografia()} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                                <Icon name="camera-alt" size={35} color={colors.primary} />
-                                <Text style={{ color: colors.primary, fontWeight: "bold" }}>Tomar fotografia</Text>
-                            </TouchableOpacity>)
-                            : (
-                                <TouchableOpacity onPress={() => tomarFotografia()} >
-                                    <ImageBackground source={{ uri: tempUri }} style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }} resizeMode="cover">
-                                        <Icon name="camera-alt" size={35} color={colors.white} />
-                                        <Text style={{ color: colors.white, fontWeight: "bold" }}>Editar fotografia</Text>
-                                    </ImageBackground>
-                                </TouchableOpacity>
-                            )
-                        }
-                    </View>
+            <View style={{ padding: 15 }}>
+                <View style={{ marginBottom: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Tipo Visita: </Text>
+                    <Text style={{ fontSize: 16, marginBottom: 5, color: colors.black }}>{tiposVisita}</Text>
                 </View>
-            }
 
-            {/* <View style={{ marginBottom: 10, marginTop: 10 }}>
+                {requiereMeta &&
+                    <><View style={{ marginBottom: 10 }}>
+                        <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Meta:</Text>
+                        <Text style={{ fontSize: 16, marginBottom: 5, color: colors.black }}>{metaCumplir}</Text>
+
+
+                    </View><View style={{ marginBottom: 10 }}>
+                            <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Cantidad de Meta</Text>
+                            <CustomInput placeholder="Cantidad de Meta" value={meta} setValue={setMeta} />
+                        </View></>
+                }
+
+                {requiereMetaLinea &&
+                    <><View style={{ marginBottom: 10 }}>
+                        <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Meta Linea:</Text>
+                        <Text style={{ fontSize: 16, marginBottom: 5, color: colors.black }}>{metaLineaCumplir}</Text>
+
+
+                    </View><View style={{ marginBottom: 10 }}>
+                            <Text style={{ fontSize: 16, fontWeight: "bold" }}>Cantidad de Meta Linea</Text>
+                            <CustomInput placeholder="Cantidad de Meta" value={metaLinea} setValue={setMetaLinea} />
+                        </View></>
+                }
+                {requiereMetaSubLinea &&
+                    <><View style={{ marginBottom: 10 }}>
+                        <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Meta SubLinea:</Text>
+                        <Text style={{ fontSize: 16, marginBottom: 5, color: colors.black }}>{metaSubLineaCumplir}</Text>
+
+
+                    </View><View style={{ marginBottom: 10 }}>
+                            <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Cantidad de Meta SubLinea</Text>
+                            <CustomInput placeholder="Cantidad de Meta" value={metaSubLinea} setValue={setMetaSubLinea} />
+                        </View></>
+                }
+
+                <View style={{ marginBottom: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.black }}>Comentario(*)</Text>
+                    <CustomInput placeholder="Comentario" value={comentario} setValue={setComentario} />
+                </View>
+
+                {(imagenRequerida || longitud === 0) &&
+                    <View style={{ marginBottom: 10, marginTop: 10 }}>
+                        <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Fotografia</Text>
+                        <View style={{ height: height * 0.20, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
+                            {(tempUri === "" || tempUri === undefined)
+                                ? (<TouchableOpacity onPress={() => tomarFotografia()} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                                    <Icon name="camera-alt" size={35} color={colors.primary} />
+                                    <Text style={{ color: colors.primary, fontWeight: "bold" }}>Tomar fotografia</Text>
+                                </TouchableOpacity>)
+                                : (
+                                    <TouchableOpacity onPress={() => tomarFotografia()} >
+                                        <ImageBackground source={{ uri: tempUri }} style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }} resizeMode="cover">
+                                            <Icon name="camera-alt" size={35} color={colors.white} />
+                                            <Text style={{ color: colors.white, fontWeight: "bold" }}>Editar fotografia</Text>
+                                        </ImageBackground>
+                                    </TouchableOpacity>
+                                )
+                            }
+                        </View>
+                    </View>
+                }
+
+                {/* <View style={{ marginBottom: 10, marginTop: 10 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Ubicación</Text>
                 <View style={{ height: height * 0.25, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
                     <MapView
@@ -340,22 +345,22 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                     </MapView>
                 </View>
             </View> */}
-            <LoadingModal visible={isLoading} />
-            <View style={{ marginBottom: 20 }}>
-                <Conexion />
-                <CustomButton text="Completar Tarea" onPress={crearVisita} />
+                <LoadingModal visible={isLoading} />
+                <View style={{ marginBottom: 20 }}>
+                    <Conexion />
+                    <CustomButton text="Completar Tarea" onPress={crearVisita} />
 
-                {longitud == 0 &&
-                    <>
-                        <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>No se logro obtener la ubicación, verifique que el GPS este activo:</Text>
-                    </>
-                }
+                    {longitud == 0 &&
+                        <>
+                            <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>No se logro obtener la ubicación, verifique que el GPS este activo:</Text>
+                        </>
+                    }
+                    {marcarWeb &&
+                        <CustomButton text="Completar desde el navegador" onPress={handleOpenBrowser} />
+                    }
 
-                <CustomButton text="Completar desde el navegador" onPress={handleOpenBrowser} />
-
-
+                </View>
             </View>
-        </View>
         </KeyboardAwareScrollView>
     )
 }

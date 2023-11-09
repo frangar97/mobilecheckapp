@@ -6,6 +6,7 @@ import { AuthNavigation } from './src/navigation/AuthNavigation';
 // import { enableLatestRenderer } from 'react-native-maps';
 import { useTipoVisita, useCliente, useVisita, useUsuario, useTarea } from './src/store';
 import SplashScreen from 'react-native-splash-screen';
+import { useAccesosWeb } from './src/store/accesos';
 LogBox.ignoreAllLogs();
 //  enableLatestRenderer();
 
@@ -15,6 +16,7 @@ const App = () => {
   const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
   const obtenerVisitas = useVisita(e => e.obtenerVisitas);
   const obtenerTareas = useTarea(e => e.obtenerTareas);
+  const obtenerAccesosWeb = useAccesosWeb(e => e.obtenerAccesos);
 
   useEffect(() => {
     if (_hasHydrated && sesionActiva) {
@@ -22,6 +24,7 @@ const App = () => {
       obtenerClientes(token);
       obtenerVisitas(token);
       obtenerTareas(token);
+      obtenerAccesosWeb(token)
       SplashScreen.hide();
     }
 
