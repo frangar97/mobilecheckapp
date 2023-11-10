@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Alert, Text, View, ActivityIndicator, useWindowDimensions, ScrollView, TouchableOpacity, ImageBackground, StyleSheet } from "react-native";
-// import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Circle } from "react-native-maps";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import SelectDropdown from 'react-native-select-dropdown'
@@ -8,7 +8,7 @@ import { openSettings } from "react-native-permissions";
 import Geolocation from "@react-native-community/geolocation";
 import { ImagePickerResponse, launchCamera } from "react-native-image-picker";
 import { AppNavigationType } from "../types/navigation_types";
-import { askLocationPermission, checkLocationPermission } from "../utils/location";
+import { CalcularDistancia, askLocationPermission, checkLocationPermission } from "../utils/location";
 import { apiURL, colors } from "../constants";
 import { CustomButton, CustomInput } from "../components";
 import axios from "axios";
@@ -34,6 +34,9 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
     const requiereMetaLinea = route.params.requiereMetaLinea;
     const metaSubLineaCumplir = route.params.metaSublinea;
     const requiereMetaSubLinea = route.params.requiereMetaSubLinea;
+    const latitudCliente = route.params.latitudCliente;
+    const longitudCliente = route.params.longitudCliente;
+    const [distancia, setDistancia] = useState("Sin calcular");
     const [loading, setLoading] = useState(true);
     const [guardando, setGuardando] = useState(false);
     const [latitud, setLatitud] = useState(0);
@@ -53,6 +56,9 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
     const offline = OfflineScreen();
     const [marcarWeb, setMarcarWeb] = useState(false);
     const accesosWeb = useAccesosWeb(e => e.accesos);
+    const [distanciaAsesor, setDistanciaAsesor] = useState(0)
+    const [fillColor, setFillColor] = useState("");
+    const [strokeColor, setStrokeColor] = useState("");
 
     const simulateAsyncTask = () => {
         setIsLoading(true);
@@ -229,11 +235,12 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             .catch((err) => console.error('Error al abrir la URL:', err));
     };
 
-    useEffect(() => {
+    useEffect(() => {       
         obtenerUbicacionActual();
         const webMarcaje = accesosWeb.some(e => e.pantalla = "Completar Tareas Desde la Web");
         setMarcarWeb(webMarcaje);
-    }, []);
+        calcularDistancia();
+    }, [navigation,latitud, longitud]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -241,6 +248,34 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             headerShown: true,
         })
     }, [navigation]);
+
+    const calcularDistancia = () => {
+        // debugger
+        // if(latitudCliente  == 0|| longitudCliente == 0){
+        //     Alert.alert("Cliente sin ubicación");
+        // }
+
+        const dist = parseInt(CalcularDistancia(latitud, longitud, latitudCliente, longitudCliente));
+
+        // if (Number.isNaN(dist)) {
+        //     Alert.alert("Error al calcular distancia");
+        // }
+
+        if (dist > 100) {
+            Alert.alert("No puedes marcar distancia actual de la tienda: ", dist.toString() + " mtrs")
+            setFillColor("rgba(255, 99, 71, 0.4)");
+            setStrokeColor("rgba(255, 99, 71, 0.4");
+        }else{
+            setFillColor("rgba(0, 169, 0, 0.4)");
+            setStrokeColor("rgba(0, 169, 0, 0.4)");
+        }
+
+        
+
+        setDistanciaAsesor(dist);
+        setDistancia(dist.toString() + " mtrs");
+    }
+
 
     if (loading) {
         return (
@@ -335,16 +370,29 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                     </View>
                 }
 
-                {/* <View style={{ marginBottom: 10, marginTop: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Ubicación</Text>
-                <View style={{ height: height * 0.25, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
-                    <MapView
-                        style={{ width: "100%", height: "100%", borderRadius: 3 }}
-                        initialRegion={{ latitude: latitud, longitude: longitud, latitudeDelta: 0, longitudeDelta: 0 }}>
-                        <Marker coordinate={{ latitude: latitud, longitude: longitud }} />
-                    </MapView>
+                <View style={{ marginBottom: 10, marginTop: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Ubicación</Text>
+                    <View style={{ height: height * 0.25, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
+                        <MapView
+                            style={{ width: '100%', height: '100%', borderRadius: 3 }}
+                            initialRegion={{ latitude: latitudCliente, longitude: longitudCliente, latitudeDelta: 0, longitudeDelta: 0 }}
+                        >
+                            <Marker coordinate={{ latitude: latitud, longitude: longitud }} title="Impulsadora"></Marker>
+                            <Marker
+                                coordinate={{ latitude: latitudCliente, longitude: longitudCliente }}
+                                pinColor="blue"
+                                title="Cliente"
+                            />
+                            <Circle
+                                center={{ latitude: latitudCliente, longitude: longitudCliente }}
+                                radius={distanciaAsesor}
+                                fillColor={fillColor}
+                                strokeColor={strokeColor}
+                                strokeWidth={2}                                
+                            />
+                        </MapView>
+                    </View>
                 </View>
-            </View> */}
                 <LoadingModal visible={isLoading} />
                 <View style={{ marginBottom: 20 }}>
                     <Conexion />
@@ -358,6 +406,13 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                     {marcarWeb &&
                         <CustomButton text="Completar desde el navegador" onPress={handleOpenBrowser} />
                     }
+                    <Text>distancia: {distancia}</Text>
+                    <Text>Asesor</Text>
+                    <Text>{latitud}</Text>
+                    <Text>{longitud}</Text>
+                    <Text>Cliente</Text>
+                    <Text>{latitudCliente}</Text>
+                    <Text>{longitudCliente}</Text>
 
                 </View>
             </View>

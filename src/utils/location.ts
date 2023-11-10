@@ -21,7 +21,7 @@ export const CalcularDistancia = (lat1: any, lon1:any, lat2:any, lon2:any) => {
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
 
-    var s = (1000 * parseFloat(d.toFixed(2))).toString();
+    var s = (1000 * parseFloat(d.toFixed(3))).toString();
 
     return s;//Retorna valor en metros
 }
