@@ -14,4 +14,5 @@ export interface Tarea {
     requiereMetaSubLinea: boolean
     latitudCliente: number
     longitudCliente: number
+    necesitaaprobacion: boolean
 }

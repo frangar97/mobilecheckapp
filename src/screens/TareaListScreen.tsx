@@ -31,7 +31,6 @@ export const TareaListScreen: FC<props> = ({ navigation }) => {
         )
     }
 
-
     return (
         <FlashList
             data={tareas}
@@ -39,16 +38,23 @@ export const TareaListScreen: FC<props> = ({ navigation }) => {
             renderItem={({ item }) => (
                 <TouchableOpacity style={style.cardContainer} onPress={() => {
 
-                    if (item.completada) {
+                    if (item.completada || item.necesitaaprobacion) {
                         return;
                     }
-                    navigation.navigate("tarea_complete", { clienteId: item.clienteId, tareaId: item.id, imagenRequerida: item.imagenRequerida, tipoVisita: item.tipoVisita, meta: item.meta, requiereMeta: item.requieremeta, metaLinea:item.metaLinea, metaSublinea:item.metaSublinea, requiereMetaLinea: item.requiereMetaLinea, requiereMetaSubLinea: item.requiereMetaSubLinea, latitudCliente:item.latitudCliente, longitudCliente: item.longitudCliente })
+                    navigation.navigate("tarea_complete", { clienteId: item.clienteId, tareaId: item.id, imagenRequerida: item.imagenRequerida, tipoVisita: item.tipoVisita, meta: item.meta, requiereMeta: item.requieremeta, metaLinea: item.metaLinea, metaSublinea: item.metaSublinea, requiereMetaLinea: item.requiereMetaLinea, requiereMetaSubLinea: item.requiereMetaSubLinea, latitudCliente: item.latitudCliente, longitudCliente: item.longitudCliente })
                 }}>
                     <View>
                         <Text style={{ color: "black", fontWeight: "bold" }}>{item.cliente} - {item.tipoVisita}</Text>
-                        <Text style={{ color: "black" }}>{format(new Date(item.fecha.replace('Z','')), "hh-mm a", {locale: ptBR})}</Text>
+                        <Text style={{ color: "black" }}>{format(new Date(item.fecha.replace('Z', '')), "hh-mm a", { locale: ptBR })}</Text>
+                        {(item.necesitaaprobacion) &&
+                            <Text>Tarea en proceso de validación</Text>
+                        }
                     </View>
-                    <Icon name={item.completada ? "check-circle-outline" : "alarm"} color={item.completada ? "green" : "orange"} size={30} />
+                    {
+                        (!item.necesitaaprobacion) &&
+                        <Icon name={item.completada ? "check-circle-outline" : "alarm"} color={item.completada ? "green" : "orange"} size={30} />
+                    }
+
                 </TouchableOpacity>)}
             estimatedItemSize={tareas.length}
         />

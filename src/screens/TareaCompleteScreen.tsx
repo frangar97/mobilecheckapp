@@ -36,7 +36,13 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
     const requiereMetaSubLinea = route.params.requiereMetaSubLinea;
     const latitudCliente = route.params.latitudCliente;
     const longitudCliente = route.params.longitudCliente;
-    const [distancia, setDistancia] = useState("Sin calcular");
+    const accesosWeb = useAccesosWeb(e => e.accesos);
+    const offline = OfflineScreen();
+    const token = useUsuario(e => e.token);
+    const obtenerVisitas = useVisita(e => e.obtenerVisitas);
+    const obtenerTareas = useTarea(e => e.obtenerTareas);
+    const { height } = useWindowDimensions();
+    const [distancia, setDistancia] = useState(0);
     const [loading, setLoading] = useState(true);
     const [guardando, setGuardando] = useState(false);
     const [latitud, setLatitud] = useState(0);
@@ -47,18 +53,11 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
     const [metaSubLinea, setMetaSubLinea] = useState("");
     const [tempUri, setTempUri] = useState<string>();
     const [imageResponse, setImageResponse] = useState<ImagePickerResponse>();
-    const [tipoVisitaId, setTipoVisitaId] = useState<number>();
-    const { height } = useWindowDimensions();
-    const token = useUsuario(e => e.token);
-    const obtenerVisitas = useVisita(e => e.obtenerVisitas);
-    const obtenerTareas = useTarea(e => e.obtenerTareas);
     const [isLoading, setIsLoading] = useState(false);
-    const offline = OfflineScreen();
     const [marcarWeb, setMarcarWeb] = useState(false);
-    const accesosWeb = useAccesosWeb(e => e.accesos);
-    const [distanciaAsesor, setDistanciaAsesor] = useState(0)
     const [fillColor, setFillColor] = useState("");
     const [strokeColor, setStrokeColor] = useState("");
+    const [mandarAValidar, setMandarAValidar] = useState(false);
 
     const simulateAsyncTask = () => {
         setIsLoading(true);
@@ -121,7 +120,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
         });
     }
 
-    const crearVisita = async () => {
+    const crearVisita = async (necesitaAprobacion: boolean) => {
         try {
             setGuardando(true)
             if (offline) {
@@ -145,7 +144,10 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
 
             if (imagenRequerida === false && longitud === 0) {
                 requiereimagen = true
-            } else {
+            } else if (mandarAValidar) {
+                requiereimagen = true
+            }
+            else {
                 requiereimagen = imagenRequerida;
             }
 
@@ -188,6 +190,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             formData.append("tareaId", tareaId);
             formData.append("metaLinea", metaLinea);
             formData.append("metaSubLinea", metaSubLinea);
+            formData.append("necesitaAprobacion", necesitaAprobacion);
 
             await axios.post<Visita>(`${apiURL}/api/v1/movil/tarea/completar`, formData, { headers: { "Authorization": `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }, timeout: 60000, });
             await obtenerVisitas(token);
@@ -198,7 +201,6 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
         } catch (err: any) {
             setGuardando(false)
             if (axios.isCancel(err)) {
-                console.log('Request cancelled:', err.message);
                 Alert.alert("Tarea", "Procedo de completado de tarea cancelado.",
                     [
                         { text: 'Ok', style: 'cancel' },
@@ -206,7 +208,6 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                     { cancelable: false }
                 );
             } else if (err.code === 'ECONNABORTED') {
-                console.log('Request timed out:', err.message);
                 Alert.alert("Tarea", "Verifique su cobertura de internet, tiempo agotado para completar la tarea.",
                     [
                         { text: 'Ok', style: 'cancel' },
@@ -215,8 +216,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                     { cancelable: false }
                 );
             } else {
-                console.log('Error:', err.message);
-                Alert.alert("Tarea", "ocurrio un error y no se pudo registrar la tarea, verifique su cobertura de internet.",
+                Alert.alert("Tarea", "ocurrio un error y no se pudo completar la tarea",
                     [
                         { text: 'Ok', style: 'cancel' },
                         { text: 'Completar desde el navegador', onPress: () => handleOpenBrowser() },
@@ -224,7 +224,6 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                     { cancelable: false }
                 );
             }
-
         }
     }
 
@@ -235,12 +234,12 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             .catch((err) => console.error('Error al abrir la URL:', err));
     };
 
-    useEffect(() => {       
+    useEffect(() => {
         obtenerUbicacionActual();
         const webMarcaje = accesosWeb.some(e => e.pantalla = "Completar Tareas Desde la Web");
         setMarcarWeb(webMarcaje);
         calcularDistancia();
-    }, [navigation,latitud, longitud]);
+    }, [navigation, latitud, longitud]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -255,27 +254,37 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
         //     Alert.alert("Cliente sin ubicación");
         // }
 
-        const dist = parseInt(CalcularDistancia(latitud, longitud, latitudCliente, longitudCliente));
+        const distanciaCalculada = CalcularDistancia(latitud, longitud, latitudCliente, longitudCliente);
+        let dist = -1;
 
-        // if (Number.isNaN(dist)) {
-        //     Alert.alert("Error al calcular distancia");
-        // }
+
+        if (distanciaCalculada == "Distancia no disponible") {
+            setMandarAValidar(true);
+        } else {
+            setMandarAValidar(false);
+            dist = parseInt(distanciaCalculada);
+        }
+
+
+        //  if (Number.isNaN(dist)) {
+        //      Alert.alert("Error al calcular distancia");
+        //  }
 
         if (dist > 100) {
             Alert.alert("No puedes marcar distancia actual de la tienda: ", dist.toString() + " mtrs")
             setFillColor("rgba(255, 99, 71, 0.4)");
             setStrokeColor("rgba(255, 99, 71, 0.4");
-        }else{
+            setMandarAValidar(true);
+        } else {
             setFillColor("rgba(0, 169, 0, 0.4)");
             setStrokeColor("rgba(0, 169, 0, 0.4)");
         }
 
-        
+        if (dist >= 0) {
+            setDistancia(dist);
+        }
 
-        setDistanciaAsesor(dist);
-        setDistancia(dist.toString() + " mtrs");
     }
-
 
     if (loading) {
         return (
@@ -348,7 +357,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                     <CustomInput placeholder="Comentario" value={comentario} setValue={setComentario} />
                 </View>
 
-                {(imagenRequerida || longitud === 0) &&
+                {(imagenRequerida || longitud === 0 || mandarAValidar) &&
                     <View style={{ marginBottom: 10, marginTop: 10 }}>
                         <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Fotografia</Text>
                         <View style={{ height: height * 0.20, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
@@ -385,10 +394,10 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                             />
                             <Circle
                                 center={{ latitude: latitudCliente, longitude: longitudCliente }}
-                                radius={distanciaAsesor}
+                                radius={distancia}
                                 fillColor={fillColor}
                                 strokeColor={strokeColor}
-                                strokeWidth={2}                                
+                                strokeWidth={2}
                             />
                         </MapView>
                     </View>
@@ -396,17 +405,34 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                 <LoadingModal visible={isLoading} />
                 <View style={{ marginBottom: 20 }}>
                     <Conexion />
-                    <CustomButton text="Completar Tarea" onPress={crearVisita} />
-
-                    {longitud == 0 &&
+ 
+                    {(longitud == 0 || latitud == 0) &&
                         <>
-                            <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>No se logro obtener la ubicación, verifique que el GPS este activo:</Text>
+                            <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>No se logro obtener la ubicación, verifique que el GPS este activo</Text>
                         </>
                     }
+
+                    {(longitudCliente === 0 || latitudCliente === 0) &&
+                        <>
+                            <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Cliente sin ubicación</Text>
+                        </>
+                    }
+
                     {marcarWeb &&
                         <CustomButton text="Completar desde el navegador" onPress={handleOpenBrowser} />
                     }
-                    <Text>distancia: {distancia}</Text>
+
+                    {!mandarAValidar &&
+                        <CustomButton text="Completar Tarea" onPress={() => crearVisita(false)} />
+                    }
+
+                    {mandarAValidar &&
+                        <CustomButton text="Enviar a Validar" onPress={() => crearVisita(true)} />
+                    }
+
+
+
+                    <Text>distancia: {distancia} mtrs</Text>
                     <Text>Asesor</Text>
                     <Text>{latitud}</Text>
                     <Text>{longitud}</Text>
