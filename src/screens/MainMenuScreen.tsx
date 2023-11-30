@@ -4,7 +4,7 @@ import { openSettings } from "react-native-permissions";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { MenuItem } from "../components";
 import { useUsuario, useCliente, useTipoVisita, useVisita, useTarea } from '../store';
-import { colors, icons, images } from "../constants";
+import { VersionApp, colors, icons, images } from "../constants";
 import { askLocationPermission, checkLocationPermission } from "../utils/location";
 import { OfflineScreen } from "../utils/connectionStatus";
 import { useAccesosWeb } from "../store/accesos";
@@ -13,7 +13,7 @@ export const MainMenuScreen = () => {
     const cerrarSesion = useUsuario(e => e.cerrarSesion);
     const token = useUsuario(e => e.token);
     const obtenerClientes = useCliente(e => e.obtenerClientes);
-    const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
+    //const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
     const obtenerVisitas = useVisita(e => e.obtenerVisitas);
     const obtenerTareas = useTarea(e => e.obtenerTareas);
     const obtenerAccesosWeb = useAccesosWeb(e => e.obtenerAccesos)
@@ -41,7 +41,7 @@ export const MainMenuScreen = () => {
             [{
                 text: "Si", onPress: () => {
                     obtenerClientes(token);
-                    obtenerTiposVisita(token);
+                    //obtenerTiposVisita(token);
                     obtenerVisitas(token);
                     obtenerTareas(token);
                     obtenerAccesosWeb(token);
@@ -81,6 +81,11 @@ export const MainMenuScreen = () => {
                     <MenuItem helperText="Tareas" icon={icons.task} route="tarea_list" />
                 </View>
             </View>
+            <View style={styles.info}>
+            <TouchableOpacity>
+                    <Text style={{ color: 'white' }}>Versión App: {VersionApp}</Text>
+                </TouchableOpacity>
+            </View>
         </View>
 
     )
@@ -111,5 +116,10 @@ const styles = StyleSheet.create({
     rowMenu: {
         flexDirection: "row",
         justifyContent: "space-around",
+    },
+    info: {
+        flexDirection: "row",
+        justifyContent: "center",
+        backgroundColor: colors.primary,
     }
 })

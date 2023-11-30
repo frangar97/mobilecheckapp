@@ -9,7 +9,7 @@ import Geolocation from "@react-native-community/geolocation";
 import { ImagePickerResponse, launchCamera } from "react-native-image-picker";
 import { AppNavigationType } from "../types/navigation_types";
 import { CalcularDistancia, askLocationPermission, checkLocationPermission } from "../utils/location";
-import { apiURL, colors } from "../constants";
+import { VersionApp, apiURL, colors } from "../constants";
 import { CustomButton, CustomInput } from "../components";
 import axios from "axios";
 import { format } from "date-fns";
@@ -192,15 +192,31 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             formData.append("metaSubLinea", metaSubLinea);
             formData.append("necesitaAprobacion", necesitaAprobacion);
 
-            await axios.post<Visita>(`${apiURL}/api/v1/movil/tarea/completar`, formData, { headers: { "Authorization": `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }, timeout: 60000, });
+            await axios.post<Visita>(`${apiURL}/api/v1/movil/tarea/completar`, formData, { headers: { "Authorization": `Bearer ${token}` , "VersionApp" : VersionApp, 'Content-Type': 'multipart/form-data' }, timeout: 60000, });
             await obtenerVisitas(token);
             await obtenerTareas(token);
             setGuardando(false)
             navigation.pop(1);
-            Alert.alert("Tarea", "Tarea completada con exito.");
+
+            if(necesitaAprobacion){
+                Alert.alert("Tarea", "Tarea enviada, pendiente de aprobación.");
+            }else{
+                Alert.alert("Tarea", "Tarea completada con exito.");
+            }
+            
         } catch (err: any) {
+
             setGuardando(false)
-            if (axios.isCancel(err)) {
+
+            if (axios.isAxiosError(err)) {
+                const errorMessage = (err.response?.data as { message?: string })?.message;
+
+                if (errorMessage != undefined) {
+                    Alert.alert(errorMessage + "  para completar la tarea. Version actual " + VersionApp);
+                } else {
+                    Alert.alert("ocurrio un error y no se pudo completar la tarea");
+                }
+            } else if (axios.isCancel(err)) {
                 Alert.alert("Tarea", "Procedo de completado de tarea cancelado.",
                     [
                         { text: 'Ok', style: 'cancel' },
@@ -271,7 +287,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
         //  }
 
         if (dist > 100) {
-            Alert.alert("No puedes marcar distancia actual de la tienda: ", dist.toString() + " mtrs")
+            Alert.alert("No puedes completar la tarea, distancia actual de la tienda: ", dist.toString() + " mtrs")
             setFillColor("rgba(255, 99, 71, 0.4)");
             setStrokeColor("rgba(255, 99, 71, 0.4");
             setMandarAValidar(true);
@@ -380,7 +396,8 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                 }
 
                 <View style={{ marginBottom: 10, marginTop: 10 }}>
-                    <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Ubicación</Text>
+                    <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Distancia Actual: {distancia} mtrs</Text>
+                    <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Ubicación:</Text>
                     <View style={{ height: height * 0.25, width: "100%", borderColor: "#ccc", borderWidth: 1, borderRadius: 3 }}>
                         <MapView
                             style={{ width: '100%', height: '100%', borderRadius: 3 }}
@@ -405,16 +422,17 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                 <LoadingModal visible={isLoading} />
                 <View style={{ marginBottom: 20 }}>
                     <Conexion />
- 
+
                     {(longitud == 0 || latitud == 0) &&
                         <>
-                            <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>No se logro obtener la ubicación, verifique que el GPS este activo</Text>
+                            <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.red }}>*No se logro obtener la ubicación, verifique que el GPS este activo.</Text>
+                            <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.red }}>*Esta tarea sera aprobada mediante la fotografia(Si la fotografía no demuestra su presencia en la tienda sera rechazada, afectando su puntualidad).</Text>
                         </>
                     }
 
                     {(longitudCliente === 0 || latitudCliente === 0) &&
                         <>
-                            <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.black }}>Cliente sin ubicación</Text>
+                            <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5, color: colors.red }}>Cliente sin ubicación</Text>
                         </>
                     }
 
@@ -427,18 +445,16 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                     }
 
                     {mandarAValidar &&
-                        <CustomButton text="Enviar a Validar" onPress={() => crearVisita(true)} />
+                        <CustomButton text="Enviar a aprobar" onPress={() => crearVisita(true)} />
                     }
 
-
-
-                    <Text>distancia: {distancia} mtrs</Text>
+                    {/* <Text>distancia: {distancia} mtrs</Text>
                     <Text>Asesor</Text>
                     <Text>{latitud}</Text>
                     <Text>{longitud}</Text>
                     <Text>Cliente</Text>
                     <Text>{latitudCliente}</Text>
-                    <Text>{longitudCliente}</Text>
+                    <Text>{longitudCliente}</Text> */}
 
                 </View>
             </View>

@@ -4,7 +4,9 @@ import { format } from "date-fns";
 import create from "zustand";
 import { persist } from "zustand/middleware";
 import { apiURL } from "../constants";
+import { VersionApp } from "../constants";
 import { Tarea } from "../types/tarea_type";
+import { Alert } from "react-native";
 
 interface TareaState {
     tareas: Tarea[],
@@ -18,11 +20,21 @@ export const useTarea = create<TareaState>()(
             tareas: [],
             async obtenerTareas(token) {
                 try {
-                    const request = await axios.get<Tarea[]>(`${apiURL}/api/v1/movil/tarea`, { headers: { "Authorization": `Bearer ${token}` }, params: { fecha: format(new Date(), "yyyy-MM-dd") } });
+                    const request = await axios.get<Tarea[]>(`${apiURL}/api/v1/movil/tarea`, { headers: { "Authorization": `Bearer ${token}`, "VersionApp" : VersionApp }, params: { fecha: format(new Date(), "yyyy-MM-dd") } });
                     const tareas = request.data;
                     set({ tareas });
-                } catch (err) {
+                } catch (err: unknown) {
+                    if (axios.isAxiosError(err)) {                    
+                        const errorMessage = (err.response?.data as { message?: string })?.message;
 
+                        if(errorMessage != undefined){
+                            Alert.alert(errorMessage + "  version actual " + VersionApp)
+                        }else{
+                            Alert.alert("Error al cargar las tareas")
+                        }
+                    } else {
+                        Alert.alert("Error al cargar las tareas")
+                    }
                 }
             },
             async guardarTarea(tarea: Tarea) {

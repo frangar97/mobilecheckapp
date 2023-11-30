@@ -3,8 +3,9 @@ import axios from "axios";
 import { format } from "date-fns";
 import create from "zustand";
 import { persist } from "zustand/middleware";
-import { apiURL } from "../constants";
+import { VersionApp, apiURL } from "../constants";
 import { Visita } from "../types/visita_types";
+import { Alert } from "react-native";
 
 interface VisitaState {
     visitas: Visita[],
@@ -18,11 +19,21 @@ export const useVisita = create<VisitaState>()(
             visitas: [],
             async obtenerVisitas(token) {
                 try {
-                    const request = await axios.get<Visita[]>(`${apiURL}/api/v1/movil/visita`, { headers: { "Authorization": `Bearer ${token}` }, params: { fecha: format(new Date(), "yyyy-MM-dd") } });
+                    const request = await axios.get<Visita[]>(`${apiURL}/api/v1/movil/visita`, { headers: { "Authorization": `Bearer ${token}`, "VersionApp" : VersionApp  }, params: { fecha: format(new Date(), "yyyy-MM-dd") } });
                     const visitas = request.data;
                     set({ visitas });
-                } catch (err) {
+                } catch (err: unknown) {
+                    // if (axios.isAxiosError(err)) {
+                    //     const errorMessage = (err.response?.data as { message?: string })?.message;
 
+                    //     if (errorMessage != undefined) {
+                    //         Alert.alert(errorMessage + "  version actual " + VersionApp);
+                    //     } else {
+                    //         Alert.alert("Error al las visitas");
+                    //     }
+                    // } else {
+                    //     Alert.alert("Error al las visitas");
+                    // }
                 }
             },
             async guardarVisita(visita: Visita) {

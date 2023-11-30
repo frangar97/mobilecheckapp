@@ -4,11 +4,11 @@ import images from "./images";
 //passwordkey = Intermoda2020
 //const apiURL = "http://18.219.36.66:8080";
 const apiURL = "http://localhost:3007";
-
+const VersionApp = "1.0";
 
 export {
     icons,
     images,
     colors,
-    apiURL
-}
+    apiURL, VersionApp
+};

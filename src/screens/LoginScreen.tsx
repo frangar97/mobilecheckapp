@@ -12,7 +12,7 @@ import { KeyboardAwareScrollView, KeyboardAwareScrollViewProps } from 'react-nat
 export const LoginScreen = () => {
     const guardarUsuario = useUsuario(e => e.guardarUsuario);
     const obtenerClientes = useCliente(e => e.obtenerClientes);
-    const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
+    //const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
     const obtenerVisitas = useVisita(e => e.obtenerVisitas);
     const obtenerTareas = useTarea(e => e.obtenerTareas);
     const obtenerAccesosWeb = useAccesosWeb(e => e.obtenerAccesos);
@@ -31,7 +31,7 @@ export const LoginScreen = () => {
 
             const request = await axios.post<{ usuario: string, token: string }>(`${apiURL}/api/v1/movil/login`, { usuario, password });
             const data = request.data;
-            obtenerTiposVisita(data.token);
+            //obtenerTiposVisita(data.token);
             obtenerClientes(data.token);
             obtenerVisitas(data.token);
             obtenerTareas(data.token);
