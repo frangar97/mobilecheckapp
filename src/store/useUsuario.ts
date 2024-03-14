@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 interface UsuarioState {
     token: string,
@@ -25,7 +25,7 @@ export const useUsuario = create<UsuarioState>()(
         }),
         {
             name: 'usuario-storage',
-            getStorage: () => AsyncStorage,
+            storage: createJSONStorage(() => AsyncStorage),
             onRehydrateStorage: () => (state) => {
                 state?.setHasHydrated(true);
             }

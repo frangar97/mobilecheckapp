@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 import { apiURL } from '../constants';
 import { Cliente } from '../types/cliente_types';
 
@@ -31,7 +31,7 @@ export const useCliente = create<ClienteState>()(
         }),
         {
             name: 'cliente-storage',
-            getStorage: () => AsyncStorage,
+            storage: createJSONStorage(() => AsyncStorage),
         }
     )
 );

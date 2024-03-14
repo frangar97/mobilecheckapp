@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import create from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { apiURL } from "../constants";
 import { TipoVisita } from "../types/tipo_visita_types";
 
@@ -27,7 +27,7 @@ export const useTipoVisita = create<TipoVisitaState>()(
         }),
         {
             name: 'tipoVisita-storage',
-            getStorage: () => AsyncStorage,
+            storage: createJSONStorage(() => AsyncStorage),
         }
     )
 );

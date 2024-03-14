@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { format } from "date-fns";
-import create from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { apiURL } from "../constants";
 import { Visita } from "../types/visita_types";
 
@@ -32,7 +32,7 @@ export const useVisita = create<VisitaState>()(
         }),
         {
             name: 'visita-storage',
-            getStorage: () => AsyncStorage,
+            storage: createJSONStorage(() => AsyncStorage),
         }
     )
 );

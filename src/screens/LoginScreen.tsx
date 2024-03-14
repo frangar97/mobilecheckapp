@@ -29,7 +29,7 @@ export const LoginScreen = () => {
             obtenerVisitas(data.token);
             obtenerTareas(data.token);
             guardarUsuario(data.usuario, data.token);
-        } catch (err) {
+        } catch (err:any) {
             Alert.alert("Inicio Sesión", "Ocurrio un error y no se pudo iniciar sesión.");
         }
     }

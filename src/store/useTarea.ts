@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { format } from "date-fns";
-import create from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { apiURL } from "../constants";
 import { Tarea } from "../types/tarea_type";
 
@@ -32,7 +32,7 @@ export const useTarea = create<TareaState>()(
         }),
         {
             name: 'tarea-storage',
-            getStorage: () => AsyncStorage,
+            storage: createJSONStorage(() => AsyncStorage),
         }
     )
 );
