@@ -177,7 +177,7 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
             if (longitud === 0 || latitud === 0) {
                 long = -55.61826399407612;
                 lat = 20.215832973903805;
-                com = "Sin Ubicacion Asesor -" + com;
+                com = "Sin Ubicacion Asesor - " + com;
             }
 
             formData.append("imagenRequerida", requiereimagen);
@@ -436,9 +436,9 @@ export const TareaCompleteScreen: FC<props> = ({ navigation, route }) => {
                         </>
                     }
 
-                    {marcarWeb &&
+                    {/* {marcarWeb &&
                         <CustomButton text="Completar desde el navegador" onPress={handleOpenBrowser} />
-                    }
+                    } */}
 
                     {!mandarAValidar &&
                         <CustomButton text="Completar Tarea" onPress={() => crearVisita(false)} />
