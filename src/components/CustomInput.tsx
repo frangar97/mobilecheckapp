@@ -37,11 +37,12 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         paddingHorizontal: 10,
         marginVertical: 5,
-        flex: 1,
-        justifyContent: "space-around",
-        padding: 15,
+        // flex: 1,
+        // justifyContent: "space-around",
+        // padding: 15,
     },
     input: {
-        flex: 1
+        flex: 1,
+        color: colors.black
     },
 })
