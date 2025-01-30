@@ -2,7 +2,7 @@ import { LoginScreen } from "./LoginScreen";
 import { MainMenuScreen } from "./MainMenuScreen";
 import { VisitaListScreen } from "./VisitaListScreen";
 import { VisitaClienteListScreen } from "./VisitaClienteListScreen";
-import { VisitaCreateScreen } from "./VisitaCreateScreen";
+// import { VisitaCreateScreen } from "./VisitaCreateScreen";
 import { ClienteListScreen } from "./ClienteListScreen";
 import { ClienteDetailScreen } from "./ClienteDetailScreen";
 import { ClienteCreateScreen } from "./ClienteCreateScreen";
@@ -16,7 +16,7 @@ export {
     DashboardScreen,
     VisitaListScreen,
     VisitaClienteListScreen,
-    VisitaCreateScreen,
+    // VisitaCreateScreen,
     ClienteListScreen,
     ClienteDetailScreen,
     ClienteCreateScreen,

@@ -1,50 +1,77 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { format } from "date-fns";
-import create from "zustand";
+import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { apiURL } from "../constants";
-import { VersionApp } from "../constants";
+import { apiURL, VersionApp } from "../constants";
 import { Tarea } from "../types/tarea_type";
 import { Alert } from "react-native";
 
 interface TareaState {
-    tareas: Tarea[],
-    obtenerTareas: (token: string) => void,
-    guardarTarea: (tarea: Tarea) => Promise<void>
+  tareas: Tarea[];
+  obtenerTareas: (token: string) => Promise<void>;
+  guardarTarea: (tarea: Tarea) => Promise<void>;
 }
 
-export const useTarea = create<TareaState>()(
-    persist(
-        (set, get) => ({
-            tareas: [],
-            async obtenerTareas(token) {
-                try {
-                    const request = await axios.get<Tarea[]>(`${apiURL}/api/v1/movil/tarea`, { headers: { "Authorization": `Bearer ${token}`, "VersionApp" : VersionApp }, params: { fecha: format(new Date(), "yyyy-MM-dd") } });
-                    const tareas = request.data;
-                    set({ tareas });
-                } catch (err: unknown) {
-                    if (axios.isAxiosError(err)) {                    
-                        const errorMessage = (err.response?.data as { message?: string })?.message;
+export const useTarea = create(
+  persist<TareaState>(
+    (set, get) => ({
+      tareas: [],
 
-                        if(errorMessage != undefined){
-                            Alert.alert(errorMessage + "  version actual " + VersionApp)
-                        }else{
-                            Alert.alert("Error al cargar las tareas")
-                        }
-                    } else {
-                        Alert.alert("Error al cargar las tareas")
-                    }
-                }
-            },
-            async guardarTarea(tarea: Tarea) {
-                const tareas = get().tareas;
-                set({ tareas: [tarea, ...tareas] });
+      obtenerTareas: async (token: string) => {
+        try {
+          const response = await axios.get<Tarea[]>(
+            `${apiURL}/api/v1/movil/tarea`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                VersionApp,
+              },
+              params: { fecha: format(new Date(), "yyyy-MM-dd") },
             }
-        }),
-        {
-            name: 'tarea-storage',
-            getStorage: () => AsyncStorage,
+          );
+          set({ tareas: response.data });
+        } catch (err: unknown) {
+          if (axios.isAxiosError(err)) {
+            const errorMessage = (err.response?.data as { message?: string })?.message;
+            Alert.alert(
+              errorMessage
+                ? `${errorMessage}. Versión actual: ${VersionApp}`
+                : "Error al cargar las tareas."
+            );
+          } else {
+            Alert.alert("Ocurrió un error inesperado al cargar las tareas.");
+          }
         }
-    )
+      },
+
+      guardarTarea: async (tarea: Tarea) => {
+        try {
+          const tareas = get().tareas;
+          const updatedTareas = [tarea, ...tareas];
+          set({ tareas: updatedTareas });
+
+          // Guardar en AsyncStorage también
+          await AsyncStorage.setItem("tarea-storage", JSON.stringify(updatedTareas));
+        } catch (err) {
+          Alert.alert("Error al guardar la tarea.");
+        }
+      },
+    }),
+    {
+      name: "tarea-storage",
+      storage: {
+        getItem: async (key) => {
+          const item = await AsyncStorage.getItem(key);
+          return item ? JSON.parse(item) : null;
+        },
+        setItem: async (key, value) => {
+          await AsyncStorage.setItem(key, JSON.stringify(value));
+        },
+        removeItem: async (key) => {
+          await AsyncStorage.removeItem(key);
+        },
+      },
+    }
+  )
 );

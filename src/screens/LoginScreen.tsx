@@ -1,25 +1,25 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Alert, Image, Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native"
+import { Alert, Image, Pressable, StyleSheet, Text, TextInput, useWindowDimensions, View } from "react-native"
 import { CustomButton, CustomInput } from "../components";
 import { apiURL, colors, images } from "../constants";
-import { useVisita, useUsuario, useCliente, useTipoVisita, useTarea, useAccesosWeb } from "../store";
-import { OfflineScreen } from "../utils/connectionStatus";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
+//import { OfflineScreen } from "../utils/connectionStatus";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { KeyboardAwareScrollView, KeyboardAwareScrollViewProps } from 'react-native-keyboard-aware-scroll-view';
+import { useUsuario } from "../store/useUsuario";
+import { useAccesosWeb, useCliente, useTarea, useVisita } from "../store";
 
 export const LoginScreen = () => {
     const guardarUsuario = useUsuario(e => e.guardarUsuario);
-    const obtenerClientes = useCliente(e => e.obtenerClientes);
-    //const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
-    const obtenerVisitas = useVisita(e => e.obtenerVisitas);
-    const obtenerTareas = useTarea(e => e.obtenerTareas);
-    const obtenerAccesosWeb = useAccesosWeb(e => e.obtenerAccesos);
+     const obtenerClientes = useCliente(e => e.obtenerClientes);
+     //const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
+     const obtenerVisitas = useVisita(e => e.obtenerVisitas);
+     const obtenerTareas = useTarea(e => e.obtenerTareas);
+     const obtenerAccesosWeb = useAccesosWeb(e => e.obtenerAccesos);
     const { height } = useWindowDimensions();
     const [usuario, setUsuario] = useState("");
     const [password, setPassword] = useState("");
-    const Offline = OfflineScreen()
+    const Offline = true;//OfflineScreen()
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const iniciarSesion = async () => {
@@ -32,10 +32,10 @@ export const LoginScreen = () => {
             const request = await axios.post<{ usuario: string, token: string }>(`${apiURL}/api/v1/movil/login`, { usuario, password });
             const data = request.data;
             //obtenerTiposVisita(data.token);
-            obtenerClientes(data.token);
-            obtenerVisitas(data.token);
-            obtenerTareas(data.token);
-            obtenerAccesosWeb(data.token);
+             obtenerClientes(data.token);
+             obtenerVisitas(data.token);
+             obtenerTareas(data.token);
+             obtenerAccesosWeb(data.token);
             guardarUsuario(data.usuario, data.token);
         } catch (err) {
             Alert.alert("Inicio Sesión", "Ocurrio un error y no se pudo iniciar sesión.");

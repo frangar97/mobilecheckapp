@@ -1,8 +1,8 @@
 import { Text, View, ScrollView, StyleSheet, useWindowDimensions } from 'react-native';
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { DonutChart } from "react-native-circular-chart";
 import { colors } from '../constants';
 import { useVisita, useCliente, useUsuario, useTarea } from '../store';
+import { CircularProgress } from 'react-native-circular-progress';
 
 export const DashboardScreen = () => {
     const { width } = useWindowDimensions();
@@ -14,7 +14,11 @@ export const DashboardScreen = () => {
     const pendientes = tareas.filter(x => !x.completada).length;
 
     const clientesAsignados = [...new Set(clientes.map(item => item.id))];
-  
+
+    const total = pendientes + completadas;
+    const pendientePercentage = total ? (pendientes / total) * 100 : 0;
+    const completadaPercentage = total ? (completadas / total) * 100 : 0;
+
     return (
         <ScrollView style={{ padding: 15 }}>
             <View>
@@ -44,16 +48,27 @@ export const DashboardScreen = () => {
             </View>
             <View style={[style.sectionWrapper, { marginTop: 25 }]}>
                 {tareas.length === 0 ? <View style={{ height: 105 * 2, justifyContent: "center" }}><Text>No hay tareas para hoy</Text></View> : <><Text style={{ fontWeight: "bold", color: "black", fontSize: 15 }}>Cumplimiento Tareas</Text>
-                    <DonutChart
-                        data={[{ name: "Pendientes", color: "orange", value: pendientes }, { name: "Completadas", color: "green", value: completadas }]}
-                        strokeWidth={15}
-                        radius={90}
-                        containerWidth={width - 8 * 2}
-                        containerHeight={105 * 2}
-                        type="butt"
-                        startAngle={0}
-                        endAngle={360}
-                        animationType="slide"
+                    <CircularProgress
+                        size={180} // tamaño del gráfico
+                        width={15} // grosor del círculo
+                        fill={pendientePercentage} // porcentaje completado
+                        tintColor="orange" // color del segmento de "Pendientes"
+                        backgroundColor="transparent" // color de fondo
+                        arcSweepAngle={360} // ángulo de barrido completo
+                        rotation={0} // ángulo de rotación
+                        lineCap="round" // tipo de borde
+                        style={{ marginBottom: 10 }}
+                    />
+                    <CircularProgress
+                        size={180} // tamaño del gráfico
+                        width={15} // grosor del círculo
+                        fill={completadaPercentage} // porcentaje completado
+                        tintColor="green" // color del segmento de "Completadas"
+                        backgroundColor="transparent" // color de fondo
+                        arcSweepAngle={360} // ángulo de barrido completo
+                        rotation={0} // ángulo de rotación
+                        lineCap="round" // tipo de borde
+                        style={{ position: 'absolute' }}
                     />
                     <View style={{ flexDirection: "row", justifyContent: "space-evenly", width: "100%" }}>
                         {[{ name: "Pendientes", color: "orange", value: pendientes }, { name: "Completadas", color: "green", value: completadas }].map(e => {

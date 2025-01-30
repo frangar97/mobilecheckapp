@@ -1,14 +1,13 @@
-import { FC, useEffect } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet } from 'react-native'
+import React, { FC, useEffect } from 'react';
+import { Text, TouchableOpacity, View, StyleSheet, FlatList } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { FlashList } from "@shopify/flash-list";
+
 import { format } from "date-fns";
 import { AppNavigationType } from '../types/navigation_types';
 import { useTarea } from '../store';
 import { colors } from '../constants';
 import { ptBR } from 'date-fns/locale';
-
 
 type props = NativeStackScreenProps<AppNavigationType, "tarea_list">
 
@@ -32,7 +31,7 @@ export const TareaListScreen: FC<props> = ({ navigation }) => {
     }
 
     return (
-        <FlashList
+        <FlatList
             data={tareas}
             keyExtractor={e => e.id.toString()}
             renderItem={({ item }) => (
@@ -56,7 +55,6 @@ export const TareaListScreen: FC<props> = ({ navigation }) => {
                     }
 
                 </TouchableOpacity>)}
-            estimatedItemSize={tareas.length}
         />
     )
 }

@@ -3,20 +3,22 @@ import { View, StyleSheet, Image, TouchableOpacity, Alert, Text } from "react-na
 import { openSettings } from "react-native-permissions";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { MenuItem } from "../components";
-import { useUsuario, useCliente, useTipoVisita, useVisita, useTarea } from '../store';
+//import { useUsuario, useCliente, useTipoVisita, useVisita, useTarea } from '../store';
 import { VersionApp, colors, icons, images } from "../constants";
 import { askLocationPermission, checkLocationPermission } from "../utils/location";
 import { OfflineScreen } from "../utils/connectionStatus";
-import { useAccesosWeb } from "../store/accesos";
+import { useUsuario } from "../store/useUsuario";
+import { useAccesosWeb, useCliente, useTarea, useVisita } from "../store";
+//import { useAccesosWeb } from "../store/accesos";
 
 export const MainMenuScreen = () => {
     const cerrarSesion = useUsuario(e => e.cerrarSesion);
     const token = useUsuario(e => e.token);
-    const obtenerClientes = useCliente(e => e.obtenerClientes);
-    //const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
-    const obtenerVisitas = useVisita(e => e.obtenerVisitas);
-    const obtenerTareas = useTarea(e => e.obtenerTareas);
-    const obtenerAccesosWeb = useAccesosWeb(e => e.obtenerAccesos)
+     const obtenerClientes = useCliente(e => e.obtenerClientes);
+     //const obtenerTiposVisita = useTipoVisita(e => e.obtenerTiposVisita);
+     const obtenerVisitas = useVisita(e => e.obtenerVisitas);
+     const obtenerTareas = useTarea(e => e.obtenerTareas);
+     const obtenerAccesosWeb = useAccesosWeb(e => e.obtenerAccesos)
     const Offline = OfflineScreen()
 
     const verificarPermisos = async () => {
@@ -40,11 +42,11 @@ export const MainMenuScreen = () => {
         Alert.alert("Actualización", "¿Esta seguro de actualizar información del dispositivo?",
             [{
                 text: "Si", onPress: () => {
-                    obtenerClientes(token);
-                    //obtenerTiposVisita(token);
-                    obtenerVisitas(token);
-                    obtenerTareas(token);
-                    obtenerAccesosWeb(token);
+                     obtenerClientes(token);
+                     //obtenerTiposVisita(token);
+                     obtenerVisitas(token);
+                     obtenerTareas(token);
+                     obtenerAccesosWeb(token);
                 }
             }, { text: "No" }])
     }

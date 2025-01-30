@@ -1,9 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.intermoda.impulsadoracheck">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />    
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
@@ -14,30 +13,27 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme"
+      android:supportsRtl="true"
       android:usesCleartextTraffic="true"
       >
       <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyAUg2cFq7JFDQJY4HYxLJCIlY8zxwsS3pg"/>
+        android:name="com.google.android.maps.v2.API_KEY"
+        android:value="AIzaSyBXHfiL8rP85cLSCxtrSHq60WB5yLTFr3Y"/>
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
         android:launchMode="singleTask"
         android:windowSoftInputMode="adjustResize"
-        android:screenOrientation="portrait"
         android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
-      <!-- Recommended for Android 9 (API level 28) and lower. -->
-      <!-- Required for Android 10 (API level 29) and higher. -->
       <service
           android:name="MyNavigationService"
           android:foregroundServiceType="location">
-          <!-- Any inner elements would go here. -->
 </service>
     </application>
 </manifest>
